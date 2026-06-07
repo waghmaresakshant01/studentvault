@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>StudentVault | Effortless Student Management</title>
+  <!-- Google Fonts: Outfit -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Floating Toast Notifications Container -->
+  <div id="toastContainer" class="toast-container" aria-live="polite"></div>
+
+  <!-- Navbar/Header -->
+  <header class="navbar">
+    <div class="navbar-container">
+      <div class="brand">
+        <div class="logo-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9.004 9.004 0 008.716-6.747M12 21a9.004 9.004 0 01-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 017.843 4.582M12 3a8.997 8.997 0 00-7.843 4.582m15.686 0A11.953 11.953 0 0112 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0121 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0112 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 013 12c0-.778.099-1.533.284-2.253" />
+          </svg>
+        </div>
+        <div class="brand-text">
+          <h1>StudentVault</h1>
+          <p>Manage your college students effortlessly</p>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content Dashboard -->
+  <main class="dashboard">
+    <div class="dashboard-grid">
+      
+      <!-- Left Column: Add Student Form Panel -->
+      <section class="panel form-panel">
+        <div class="panel-header">
+          <h2>Add New Student</h2>
+          <p>Register a student record into the vault database</p>
+        </div>
+        
+        <form id="studentForm" novalidate>
+          <div class="form-group">
+            <label for="nameInput">Full Name</label>
+            <input type="text" id="nameInput" placeholder="e.g. John Doe" required>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="rollNoInput">Roll Number</label>
+              <input type="text" id="rollNoInput" placeholder="e.g. CS2026002" required>
+            </div>
+            
+            <div class="form-group">
+              <label for="phoneInput">Phone Number</label>
+              <input type="tel" id="phoneInput" placeholder="10-digit number" required>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="branchInput">Branch</label>
+              <select id="branchInput" required>
+                <option value="" disabled selected>Select branch</option>
+                <option value="CSE">CSE</option>
+                <option value="IT">IT</option>
+                <option value="ECE">ECE</option>
+                <option value="ME">ME</option>
+                <option value="CE">CE</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="yearInput">Academic Year</label>
+              <select id="yearInput" required>
+                <option value="" disabled selected>Select year</option>
+                <option value="1">1st Year</option>
+                <option value="2">2nd Year</option>
+                <option value="3">3rd Year</option>
+                <option value="4">4th Year</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="emailInput">Email Address</label>
+            <input type="email" id="emailInput" placeholder="e.g. john@studentvault.com" required>
+          </div>
+
+          <div class="form-group">
+            <label for="addressInput">Residential Address</label>
+            <textarea id="addressInput" rows="2" placeholder="e.g. 123 Campus Lane, Hostel 4"></textarea>
+          </div>
+
+          <button type="submit" id="submitBtn" class="btn btn-primary">
+            <span>Register Student</span>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="btn-icon">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+            </svg>
+          </button>
+        </form>
+      </section>
+
+      <!-- Right Column: Student Table Directory -->
+      <section class="panel table-panel">
+        <div class="panel-header table-header-flex">
+          <div>
+            <h2>Student Directory</h2>
+            <p>List of all registered students</p>
+          </div>
+          <div class="counter-badge">
+            <span class="badge-label">Total Students:</span>
+            <span id="studentCount" class="badge-value">0</span>
+          </div>
+        </div>
+
+        <!-- Table Container -->
+        <div class="table-container">
+          <table id="studentsTable">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Roll No</th>
+                <th>Branch & Year</th>
+                <th>Contact Details</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="studentTableBody">
+              <!-- Dynamically populated rows -->
+            </tbody>
+          </table>
+          
+          <!-- Empty State -->
+          <div id="emptyState" class="empty-state">
+            <div class="empty-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+              </svg>
+            </div>
+            <h3>No Students Found</h3>
+            <p>Add a student using the registration form to populate the database.</p>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-container">
+      <p>&copy; 2026 StudentVault Systems. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>

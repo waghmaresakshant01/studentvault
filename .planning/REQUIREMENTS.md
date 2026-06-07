@@ -27,12 +27,12 @@
 
 ### Frontend UI & Layout (Module 1)
 
-- [ ] **FE-01**: Express serves the `public/` directory statically under `/` (SPA layout, no page reload).
-- [ ] **FE-02**: Header/Navbar showing "StudentVault" and tagline "Manage your college students effortlessly" in a dark navy theme.
-- [ ] **FE-03**: Add Student Form with inputs for Name, Roll No, Branch (dropdown), Year (dropdown), Email, Phone, and Address.
-- [ ] **FE-04**: Toast notifications (green for success, red for error) that auto-dismiss after 3 seconds on form submit or API action.
-- [ ] **FE-05**: Students Table showing columns (Name, Roll No, Branch, Year, Email, Phone, Actions [Edit / Delete]).
-- [ ] **FE-06**: Total student count shown dynamically above the table, with an empty state message when no records exist.
+- [x] **FE-01**: Express serves the `public/` directory statically under `/` (SPA layout, no page reload).
+- [x] **FE-02**: Header/Navbar showing "StudentVault" and tagline "Manage your college students effortlessly" in a dark navy theme.
+- [x] **FE-03**: Add Student Form with inputs for Name, Roll No, Branch (dropdown), Year (dropdown), Email, Phone, and Address.
+- [x] **FE-04**: Toast notifications (green for success, red for error) that auto-dismiss after 3 seconds on form submit or API action.
+- [x] **FE-05**: Students Table showing columns (Name, Roll No, Branch, Year, Email, Phone, Actions [Edit / Delete]).
+- [x] **FE-06**: Total student count shown dynamically above the table, with an empty state message when no records exist.
 
 ### Frontend Modals & Filtering (Module 2)
 
@@ -75,12 +75,12 @@ Deferred to future release. Tracked but not in current roadmap.
 | VAL-06 | Phase 2 | Complete |
 | API-06 | Phase 2 | Complete |
 | API-07 | Phase 2 | Complete |
-| FE-01 | Phase 3 | Pending |
-| FE-02 | Phase 3 | Pending |
-| FE-03 | Phase 3 | Pending |
-| FE-04 | Phase 3 | Pending |
-| FE-05 | Phase 3 | Pending |
-| FE-06 | Phase 3 | Pending |
+| FE-01 | Phase 3 | Complete |
+| FE-02 | Phase 3 | Complete |
+| FE-03 | Phase 3 | Complete |
+| FE-04 | Phase 3 | Complete |
+| FE-05 | Phase 3 | Complete |
+| FE-06 | Phase 3 | Complete |
 | FE-07 | Phase 4 | Pending |
 | FE-08 | Phase 4 | Pending |
 | FE-09 | Phase 4 | Pending |
