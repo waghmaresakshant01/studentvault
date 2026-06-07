@@ -1,12 +1,12 @@
-# CampusCore
+# StudentVault
 
 ## What This Is
 
-CampusCore is a unified backend system for a smart college ERP. It links student profiles with academic records, administrator operations, and tracked expense modules (mess fees, library fines, etc.), while actively demonstrating a dual database configuration by utilizing MongoDB for application data and SQLite for API hit audit logs.
+StudentVault is a complete full stack web application for managing college student records. It features a Node.js + Express backend with a MongoDB database, and a clean, responsive single-page HTML/CSS/Vanilla JS frontend that communicates with the backend API via dynamic fetch() calls.
 
 ## Core Value
 
-Demonstrates production-ready integration of dual database technologies (MongoDB and SQLite) in a secure, authenticated, and schema-validated Node.js + Express.js API.
+Enable seamless, zero-page-reload management and filtering of student records through a high-performance REST API and a premium responsive frontend interface.
 
 ## Requirements
 
@@ -16,36 +16,38 @@ Demonstrates production-ready integration of dual database technologies (MongoDB
 
 ### Active
 
-- [ ] Implement dual database configuration (MongoDB/Mongoose and SQLite/better-sqlite3)
-- [ ] Implement JWT-based registration, login, and profile authorization
-- [ ] Implement Student Management REST CRUD endpoints with unique validation
-- [ ] Implement Expense Tracker CRUD endpoints with student aggregation summaries
-- [ ] Implement SQLite-based middleware logging every API hit to `audit_logs`
+- [ ] Add student with validated name, rollNo, branch, year, email, phone, and address (POST /api/students).
+- [ ] Retrieve all student records (GET /api/students).
+- [ ] Retrieve a single student by ID (GET /api/students/:id).
+- [ ] Update student record by ID (PUT /api/students/:id).
+- [ ] Delete student record by ID (DELETE /api/students/:id).
+- [ ] Filter student records by branch (GET /api/students/branch/:branch).
+- [ ] Filter student records by year (GET /api/students/year/:year).
+- [ ] Single-page application frontend with interactive search, branch/year filters, and live stats counters.
+- [ ] Modal-based student editing and delete confirmation dialogs.
 
 ### Out of Scope
 
-- Frontend User Interface — CampusCore is designed strictly as a REST API backend.
-- Email verification integration (e.g., SMTP transport) — JWT session state is sufficient for this milestone.
-- Real-time notifications — Defer to v2+ roadmap.
+- Frontend Frameworks (React, Vue, Angular) — strictly Vanilla HTML/CSS/JS frontend to keep dependencies lightweight and performance high.
+- Authentication/Authorization — this project is a local-scoped ERP tool, keeping it simple without user access control.
+- Automated Email Delivery — keeping it low-dependency without SMTP configuration.
 
 ## Context
 
-CampusCore combines student records, expense tracking, and admin auth. It requires double data storage architecture: MongoDB handles transactional ERP records, while SQLite handles low-latency audit trail logs.
+This is a clean-slate full-stack development workspace designed to replace the previous CampusCore backend with a unified, interactive student management dashboard.
 
 ## Constraints
 
-- **Backend Stack**: Node.js, Express.js.
-- **Primary Database**: MongoDB / Mongoose.
-- **Audit Database**: SQLite (via better-sqlite3).
-- **Security**: bcrypt (10 rounds) for passwords, JWT (7-day expiration) for tokens.
-- **Configuration**: Env variables managed via `dotenv`.
+- **Tech Stack Backend**: Node.js + Express, Mongoose (MongoDB), dotenv, express-validator, cors, nodemon — mandated for backend stability and validator capabilities.
+- **Tech Stack Frontend**: HTML + CSS (Vanilla) + Vanilla JS — pure frontend without compilation or bundlers.
+- **Single Page Application**: No page reloads allowed; all database interactions and UI updates must happen dynamically in the DOM via fetch().
 
 ## Key Decisions
 
 | Decision | Rationale | Outcome |
 |----------|-----------|---------|
-| SQLite for Auditing | Local, fast, serverless storage suitable for low-overhead write-only audit logs | — Pending |
-| Mongoose for Main Models | Flexible schema modeling, document referencing (Expense -> Student), validation | — Pending |
+| Serve Static Frontend | Express serves the `public/` directory statically using `app.use(express.static('public'))` for easy local development. | — Pending |
+| Clean Slate Re-init | Dropped previous CampusCore project files to start StudentVault fresh. | ✓ Good |
 
 ## Evolution
 
