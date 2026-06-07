@@ -23,13 +23,13 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Student Management (Module 2)
 
-- [ ] **STUD-01**: Add student with name, rollNo (unique), branch, year, email, phone.
-- [ ] **STUD-02**: Get all student records.
-- [ ] **STUD-03**: Get single student record by ID.
-- [ ] **STUD-04**: Update student record by ID.
-- [ ] **STUD-05**: Delete student record by ID.
-- [ ] **STUD-06**: Validation requires name, rollNo, branch, year, and enforces unique rollNo constraint.
-- [ ] **STUD-07**: All student routes are protected by auth middleware.
+- [x] **STUD-01**: Add student with name, rollNo (unique), branch, year, email, phone.
+- [x] **STUD-02**: Get all student records.
+- [x] **STUD-03**: Get single student record by ID.
+- [x] **STUD-04**: Update student record by ID.
+- [x] **STUD-05**: Delete student record by ID.
+- [x] **STUD-06**: Validation requires name, rollNo, branch, year, and enforces unique rollNo constraint.
+- [x] **STUD-07**: All student routes are protected by auth middleware.
 
 ### Expense Tracker (Module 3)
 
@@ -77,13 +77,13 @@ Requirements for initial release. Each maps to roadmap phases.
 | AUTH-04 | Phase 2 | Complete |
 | AUTH-05 | Phase 2 | Complete |
 | AUTH-06 | Phase 2 | Complete |
-| STUD-01 | Phase 3 | Pending |
-| STUD-02 | Phase 3 | Pending |
-| STUD-03 | Phase 3 | Pending |
-| STUD-04 | Phase 3 | Pending |
-| STUD-05 | Phase 3 | Pending |
-| STUD-06 | Phase 3 | Pending |
-| STUD-07 | Phase 3 | Pending |
+| STUD-01 | Phase 3 | Complete |
+| STUD-02 | Phase 3 | Complete |
+| STUD-03 | Phase 3 | Complete |
+| STUD-04 | Phase 3 | Complete |
+| STUD-05 | Phase 3 | Complete |
+| STUD-06 | Phase 3 | Complete |
+| STUD-07 | Phase 3 | Complete |
 | EXPN-01 | Phase 4 | Pending |
 | EXPN-02 | Phase 4 | Pending |
 | EXPN-03 | Phase 4 | Pending |

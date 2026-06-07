@@ -7,12 +7,14 @@ require('./config/sqlite');
 
 // Import routes
 const authRoutes = require('./routes/authRoutes');
+const studentRoutes = require('./routes/studentRoutes');
 
 const app = express();
 app.use(express.json());
 
 // Routes middleware
 app.use('/api/auth', authRoutes);
+app.use('/api/students', studentRoutes);
 
 // Basic health check route
 app.get('/api/health', (req, res) => {
