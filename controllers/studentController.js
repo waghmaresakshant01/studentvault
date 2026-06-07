@@ -1,242 +1,185 @@
 const Student = require('../models/Student');
 
-// Simple regex validations matching the model
-const validateEmail = (email) => {
-  const re = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-  return re.test(email);
-};
-
-const validatePhone = (phone) => {
-  const re = /^\d{10}$/;
-  return re.test(phone);
-};
-
-// Create a new student (Admin only)
+// Add Student (POST /api/students)
 exports.createStudent = async (req, res) => {
   try {
-    const { name, rollNo, branch, year, email, phone } = req.body;
+    const { name, rollNo, branch, year, email, phone, address } = req.body;
 
-    // Validate fields presence
-    if (!name || !rollNo || !branch || !year || !email || !phone) {
-      return res.status(400).json({
-        success: false,
-        message: 'All fields (name, rollNo, branch, year, email, phone) are required.'
-      });
-    }
-
-    // Validate formatting rules
-    if (!validateEmail(email)) {
-      return res.status(400).json({
-        success: false,
-        message: 'Please provide a valid email address.'
-      });
-    }
-
-    if (!validatePhone(phone)) {
-      return res.status(400).json({
-        success: false,
-        message: 'Phone number must be exactly 10 digits.'
-      });
-    }
-
-    const parsedYear = Number(year);
-    if (isNaN(parsedYear) || parsedYear < 1 || parsedYear > 4) {
-      return res.status(400).json({
-        success: false,
-        message: 'Year must be between 1 and 4.'
-      });
-    }
-
-    // Enforce unique rollNo constraint
-    const existingStudent = await Student.findOne({ rollNo: rollNo.trim() });
-    if (existingStudent) {
-      return res.status(400).json({
-        success: false,
-        message: 'A student with this roll number already exists.'
-      });
-    }
-
-    // Save student
     const newStudent = new Student({
-      name: name.trim(),
-      rollNo: rollNo.trim(),
-      branch: branch.trim(),
-      year: parsedYear,
-      email: email.toLowerCase().trim(),
-      phone: phone.trim()
+      name,
+      rollNo,
+      branch,
+      year,
+      email,
+      phone,
+      address
     });
 
     await newStudent.save();
 
     return res.status(201).json({
       success: true,
-      message: 'Student record created successfully.',
+      message: 'Student added successfully',
       data: newStudent
     });
 
   } catch (err) {
     console.error('Create student error:', err);
+    
+    // Handle unique constraint violations (code 11000)
+    if (err.code === 11000) {
+      const duplicateField = Object.keys(err.keyPattern)[0];
+      return res.status(400).json({
+        success: false,
+        message: `A student with this ${duplicateField} already exists.`
+      });
+    }
+
+    // Handle mongoose validation errors
+    if (err.name === 'ValidationError') {
+      const messages = Object.values(err.errors).map(val => val.message);
+      return res.status(400).json({
+        success: false,
+        message: messages.join(', ')
+      });
+    }
+
     return res.status(500).json({
       success: false,
-      message: 'Server error. Failed to create student record.',
-      error: err.message
+      message: 'Server error. Failed to add student.'
     });
   }
 };
 
-// Get all student records (All authenticated users)
+// Get All Students (GET /api/students)
 exports.getAllStudents = async (req, res) => {
   try {
     const students = await Student.find().sort({ createdAt: -1 });
     return res.status(200).json({
       success: true,
-      message: 'Student records retrieved successfully.',
+      message: 'Students retrieved successfully',
       data: students
     });
   } catch (err) {
     console.error('Get all students error:', err);
     return res.status(500).json({
       success: false,
-      message: 'Server error. Failed to retrieve student records.',
-      error: err.message
+      message: 'Server error. Failed to retrieve students.'
     });
   }
 };
 
-// Get single student record by ID (All authenticated users)
+// Get One Student (GET /api/students/:id)
 exports.getStudentById = async (req, res) => {
   try {
     const student = await Student.findById(req.params.id);
     if (!student) {
       return res.status(404).json({
         success: false,
-        message: 'Student record not found.'
+        message: 'Student not found'
       });
     }
 
     return res.status(200).json({
       success: true,
-      message: 'Student record retrieved successfully.',
+      message: 'Student retrieved successfully',
       data: student
     });
   } catch (err) {
     console.error('Get student by ID error:', err);
-    // Handle invalid ObjectId cast error
     if (err.name === 'CastError') {
       return res.status(404).json({
         success: false,
-        message: 'Student record not found.'
+        message: 'Student not found'
       });
     }
     return res.status(500).json({
       success: false,
-      message: 'Server error. Failed to retrieve student record.',
-      error: err.message
+      message: 'Server error. Failed to retrieve student.'
     });
   }
 };
 
-// Update student record by ID (Admin only)
+// Update Student (PUT /api/students/:id)
 exports.updateStudent = async (req, res) => {
   try {
-    const { name, rollNo, branch, year, email, phone } = req.body;
+    const { name, rollNo, branch, year, email, phone, address } = req.body;
 
     const student = await Student.findById(req.params.id);
     if (!student) {
       return res.status(404).json({
         success: false,
-        message: 'Student record not found.'
+        message: 'Student not found'
       });
     }
 
-    // If updating rollNo, check for uniqueness conflicts
-    if (rollNo && rollNo.trim() !== student.rollNo) {
-      const existingStudent = await Student.findOne({ rollNo: rollNo.trim() });
-      if (existingStudent) {
-        return res.status(400).json({
-          success: false,
-          message: 'A student with this roll number already exists.'
-        });
-      }
-      student.rollNo = rollNo.trim();
-    }
-
-    // Update and validate format rules if fields are supplied
-    if (name) student.name = name.trim();
-    if (branch) student.branch = branch.trim();
-
-    if (year !== undefined) {
-      const parsedYear = Number(year);
-      if (isNaN(parsedYear) || parsedYear < 1 || parsedYear > 4) {
-        return res.status(400).json({
-          success: false,
-          message: 'Year must be between 1 and 4.'
-        });
-      }
-      student.year = parsedYear;
-    }
-
-    if (email) {
-      if (!validateEmail(email)) {
-        return res.status(400).json({
-          success: false,
-          message: 'Please provide a valid email address.'
-        });
-      }
-      student.email = email.toLowerCase().trim();
-    }
-
-    if (phone) {
-      if (!validatePhone(phone)) {
-        return res.status(400).json({
-          success: false,
-          message: 'Phone number must be exactly 10 digits.'
-        });
-      }
-      student.phone = phone.trim();
-    }
+    // Assign fields if provided
+    if (name) student.name = name;
+    if (rollNo) student.rollNo = rollNo;
+    if (branch) student.branch = branch;
+    if (year) student.year = year;
+    if (email) student.email = email;
+    if (phone) student.phone = phone;
+    if (address !== undefined) student.address = address;
 
     await student.save();
 
     return res.status(200).json({
       success: true,
-      message: 'Student record updated successfully.',
+      message: 'Student updated successfully',
       data: student
     });
 
   } catch (err) {
     console.error('Update student error:', err);
+
+    if (err.code === 11000) {
+      const duplicateField = Object.keys(err.keyPattern)[0];
+      return res.status(400).json({
+        success: false,
+        message: `A student with this ${duplicateField} already exists.`
+      });
+    }
+
     if (err.name === 'CastError') {
       return res.status(404).json({
         success: false,
-        message: 'Student record not found.'
+        message: 'Student not found'
       });
     }
+
+    if (err.name === 'ValidationError') {
+      const messages = Object.values(err.errors).map(val => val.message);
+      return res.status(400).json({
+        success: false,
+        message: messages.join(', ')
+      });
+    }
+
     return res.status(500).json({
       success: false,
-      message: 'Server error. Failed to update student record.',
-      error: err.message
+      message: 'Server error. Failed to update student.'
     });
   }
 };
 
-// Delete student record by ID (Admin only)
+// Delete Student (DELETE /api/students/:id)
 exports.deleteStudent = async (req, res) => {
   try {
     const student = await Student.findById(req.params.id);
     if (!student) {
       return res.status(404).json({
         success: false,
-        message: 'Student record not found.'
+        message: 'Student not found'
       });
     }
 
-    // Hard delete
     await Student.findByIdAndDelete(req.params.id);
 
     return res.status(200).json({
       success: true,
-      message: 'Student record deleted successfully.'
+      message: 'Student deleted successfully',
+      data: student
     });
 
   } catch (err) {
@@ -244,13 +187,12 @@ exports.deleteStudent = async (req, res) => {
     if (err.name === 'CastError') {
       return res.status(404).json({
         success: false,
-        message: 'Student record not found.'
+        message: 'Student not found'
       });
     }
     return res.status(500).json({
       success: false,
-      message: 'Server error. Failed to delete student record.',
-      error: err.message
+      message: 'Server error. Failed to delete student.'
     });
   }
 };
