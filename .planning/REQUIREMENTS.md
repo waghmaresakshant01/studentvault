@@ -36,12 +36,12 @@
 
 ### Frontend Modals & Filtering (Module 2)
 
-- [ ] **FE-07**: Live search bar to filter table rows by name or roll number without calling the API.
-- [ ] **FE-08**: Branch and Year filter dropdowns that trigger backend filtering API calls.
-- [ ] **FE-09**: Clear filters button that resets the table to show all student records.
-- [ ] **FE-10**: Edit modal pre-filled with the student's current details, calling PUT `/api/students/:id` on save.
-- [ ] **FE-11**: Delete confirmation dialog calling DELETE `/api/students/:id` on approval.
-- [ ] **FE-12**: Stats Bar displaying live counts (Total Students, CSE, IT, ECE) that update automatically on additions/deletions.
+- [x] **FE-07**: Live search bar to filter table rows by name or roll number without calling the API.
+- [x] **FE-08**: Branch and Year filter dropdowns that trigger backend filtering API calls.
+- [x] **FE-09**: Clear filters button that resets the table to show all student records.
+- [x] **FE-10**: Edit modal pre-filled with the student's current details, calling PUT `/api/students/:id` on save.
+- [x] **FE-11**: Delete confirmation dialog calling DELETE `/api/students/:id` on approval.
+- [x] **FE-12**: Stats Bar displaying live counts (Total Students, CSE, IT, ECE) that update automatically on additions/deletions.
 
 ## v2 Requirements
 
@@ -81,12 +81,12 @@ Deferred to future release. Tracked but not in current roadmap.
 | FE-04 | Phase 3 | Complete |
 | FE-05 | Phase 3 | Complete |
 | FE-06 | Phase 3 | Complete |
-| FE-07 | Phase 4 | Pending |
-| FE-08 | Phase 4 | Pending |
-| FE-09 | Phase 4 | Pending |
-| FE-10 | Phase 4 | Pending |
-| FE-11 | Phase 4 | Pending |
-| FE-12 | Phase 4 | Pending |
+| FE-07 | Phase 4 | Complete |
+| FE-08 | Phase 4 | Complete |
+| FE-09 | Phase 4 | Complete |
+| FE-10 | Phase 4 | Complete |
+| FE-11 | Phase 4 | Complete |
+| FE-12 | Phase 4 | Complete |
 
 **Coverage:**
 

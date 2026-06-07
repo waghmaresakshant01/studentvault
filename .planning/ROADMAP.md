@@ -9,7 +9,7 @@ This roadmap lays out the implementation of StudentVault in 4 progressive phases
 - [x] **Phase 1: Core Backend CRUD API** - Establish project base, connect MongoDB, and build primary REST endpoints. (completed 2026-06-07)
 - [x] **Phase 2: API Validation & Filtering** - Integrate input validation checks and implement branch/year query endpoints. (completed 2026-06-07)
 - [x] **Phase 3: Single-Page Frontend Interface** - Serve frontend statically, construct forms and tables, and show toast notifications. (completed 2026-06-07)
-- [ ] **Phase 4: Frontend Modals, Filtering, and Stats** - Add edit modal, delete confirmation, live search, and stats counters.
+- [x] **Phase 4: Frontend Modals, Filtering, and Stats** - Add edit modal, delete confirmation, live search, and stats counters. (completed 2026-06-07)
 
 ## Phase Details
 
@@ -86,7 +86,7 @@ Plans:
 
 Plans:
 
-- [ ] 04-01: Implement modal overlays, search/filter listeners, stats logic, and wire confirmation dialogs.
+- [x] 04-01: Implement modal overlays, search/filter listeners, stats logic, and wire confirmation dialogs.
 
 ---
 
@@ -100,4 +100,4 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 | 1. Core Backend CRUD API | 1/1 | Complete    | 2026-06-07 |
 | 2. API Validation & Filtering | 1/1 | Complete    | 2026-06-07 |
 | 3. Single-Page Frontend Interface | 1/1 | Complete    | 2026-06-07 |
-| 4. Frontend Modals, Filtering, and Stats | 0/1 | Not started | - |
+| 4. Frontend Modals, Filtering, and Stats | 1/1 | Complete    | 2026-06-07 |
