@@ -7,7 +7,7 @@ This roadmap lays out the implementation of CampusCore in 5 progressive phases. 
 ## Phases
 
 - [x] **Phase 1: Project setup & dual database connection** - Establish dependencies, environments, Mongoose setup, and SQLite auto-initialization. (completed 2026-06-07)
-- [ ] **Phase 2: Authentication & Middleware** - Create the User model, bcrypt password hashing, and JWT authorization middleware.
+- [x] **Phase 2: Authentication & Middleware** - Create the User model, bcrypt password hashing, and JWT authorization middleware. (completed 2026-06-07)
 - [ ] **Phase 3: Student Management API** - Implement the Student model, database unique validation, and CRUD operations.
 - [ ] **Phase 4: Expense Tracker API** - Implement the Expense model, CRUD routes, filters, and aggregations.
 - [ ] **Phase 5: SQLite Logging & Delivery** - Integrate the SQLite-based hit tracker middleware and output the README.md documentation.
@@ -48,7 +48,7 @@ Plans:
 
 Plans:
 
-- [ ] 02-01: Create User model, auth controller logic, auth middleware, and validation checks.
+- [x] 02-01: Create User model, auth controller logic, auth middleware, and validation checks.
 
 ---
 
@@ -114,7 +114,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Project setup & DB | 1/1 | Complete    | 2026-06-07 |
-| 2. Auth & Middleware | 0/1 | Not started | - |
+| 2. Auth & Middleware | 1/1 | Complete    | 2026-06-07 |
 | 3. Student Management | 0/1 | Not started | - |
 | 4. Expense Tracker | 0/1 | Not started | - |
 | 5. SQLite Logger & Delivery | 0/1 | Not started | - |

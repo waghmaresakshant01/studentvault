@@ -14,12 +14,12 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Authentication System (Module 1)
 
-- [ ] **AUTH-01**: User can register with name, email, password, and role (enum: admin/student).
-- [ ] **AUTH-02**: User password must be hashed using bcrypt with saltRounds: 10.
-- [ ] **AUTH-03**: Registration validates that no fields are empty, email is valid format, password is at least 6 characters.
-- [ ] **AUTH-04**: User can login with email and password, returning a JWT token (7d expiry, custom secret).
-- [ ] **AUTH-05**: User can fetch own profile data via protected route.
-- [ ] **AUTH-06**: Auth middleware verifies JWT from Authorization Bearer token header, attaching user to req.user. Returning 401 if token is missing or invalid.
+- [x] **AUTH-01**: User can register with name, email, password, and role (enum: admin/student).
+- [x] **AUTH-02**: User password must be hashed using bcrypt with saltRounds: 10.
+- [x] **AUTH-03**: Registration validates that no fields are empty, email is valid format, password is at least 6 characters.
+- [x] **AUTH-04**: User can login with email and password, returning a JWT token (7d expiry, custom secret).
+- [x] **AUTH-05**: User can fetch own profile data via protected route.
+- [x] **AUTH-06**: Auth middleware verifies JWT from Authorization Bearer token header, attaching user to req.user. Returning 401 if token is missing or invalid.
 
 ### Student Management (Module 2)
 
@@ -71,12 +71,12 @@ Requirements for initial release. Each maps to roadmap phases.
 |-------------|-------|--------|
 | DB-01 | Phase 1 | Complete |
 | DB-02 | Phase 1 | Complete |
-| AUTH-01 | Phase 2 | Pending |
-| AUTH-02 | Phase 2 | Pending |
-| AUTH-03 | Phase 2 | Pending |
-| AUTH-04 | Phase 2 | Pending |
-| AUTH-05 | Phase 2 | Pending |
-| AUTH-06 | Phase 2 | Pending |
+| AUTH-01 | Phase 2 | Complete |
+| AUTH-02 | Phase 2 | Complete |
+| AUTH-03 | Phase 2 | Complete |
+| AUTH-04 | Phase 2 | Complete |
+| AUTH-05 | Phase 2 | Complete |
+| AUTH-06 | Phase 2 | Complete |
 | STUD-01 | Phase 3 | Pending |
 | STUD-02 | Phase 3 | Pending |
 | STUD-03 | Phase 3 | Pending |

@@ -5,8 +5,14 @@ const express = require('express');
 require('./config/mongodb');
 require('./config/sqlite');
 
+// Import routes
+const authRoutes = require('./routes/authRoutes');
+
 const app = express();
 app.use(express.json());
+
+// Routes middleware
+app.use('/api/auth', authRoutes);
 
 // Basic health check route
 app.get('/api/health', (req, res) => {
