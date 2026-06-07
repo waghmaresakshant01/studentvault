@@ -7,14 +7,14 @@
 
 ### Backend REST API
 
-- [ ] **API-01**: POST `/api/students` adds a student record to MongoDB.
-- [ ] **API-02**: GET `/api/students` retrieves all student records.
-- [ ] **API-03**: GET `/api/students/:id` retrieves a single student record by MongoDB ID.
-- [ ] **API-04**: PUT `/api/students/:id` updates a student record by ID.
-- [ ] **API-05**: DELETE `/api/students/:id` deletes a student record by ID.
+- [x] **API-01**: POST `/api/students` adds a student record to MongoDB.
+- [x] **API-02**: GET `/api/students` retrieves all student records.
+- [x] **API-03**: GET `/api/students/:id` retrieves a single student record by MongoDB ID.
+- [x] **API-04**: PUT `/api/students/:id` updates a student record by ID.
+- [x] **API-05**: DELETE `/api/students/:id` deletes a student record by ID.
 - [ ] **API-06**: GET `/api/students/branch/:branch` retrieves student records filtered by branch.
 - [ ] **API-07**: GET `/api/students/year/:year` retrieves student records filtered by year.
-- [ ] **API-08**: Enforce standard JSON response format `{ success: true/false, message: "...", data: {...} }` for all endpoints.
+- [x] **API-08**: Enforce standard JSON response format `{ success: true/false, message: "...", data: {...} }` for all endpoints.
 
 ### Backend Input Validation
 
@@ -61,12 +61,12 @@ Deferred to future release. Tracked but not in current roadmap.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| API-01 | Phase 1 | Pending |
-| API-02 | Phase 1 | Pending |
-| API-03 | Phase 1 | Pending |
-| API-04 | Phase 1 | Pending |
-| API-05 | Phase 1 | Pending |
-| API-08 | Phase 1 | Pending |
+| API-01 | Phase 1 | Complete |
+| API-02 | Phase 1 | Complete |
+| API-03 | Phase 1 | Complete |
+| API-04 | Phase 1 | Complete |
+| API-05 | Phase 1 | Complete |
+| API-08 | Phase 1 | Complete |
 | VAL-01 | Phase 2 | Pending |
 | VAL-02 | Phase 2 | Pending |
 | VAL-03 | Phase 2 | Pending |
@@ -89,6 +89,7 @@ Deferred to future release. Tracked but not in current roadmap.
 | FE-12 | Phase 4 | Pending |
 
 **Coverage:**
+
 - v1 requirements: 26 total
 - Mapped to phases: 26
 - Unmapped: 0 ✓
