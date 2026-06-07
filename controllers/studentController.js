@@ -1,18 +1,18 @@
 const Student = require('../models/Student');
 
-// Add Student (POST /api/students)
+// Add Student (POST /api/students) - Input validation is pre-checked by middleware
 exports.createStudent = async (req, res) => {
   try {
     const { name, rollNo, branch, year, email, phone, address } = req.body;
 
     const newStudent = new Student({
-      name,
-      rollNo,
-      branch,
-      year,
-      email,
-      phone,
-      address
+      name: name.trim(),
+      rollNo: rollNo.trim(),
+      branch: branch.trim().toUpperCase(),
+      year: Number(year),
+      email: email.toLowerCase().trim(),
+      phone: phone.trim(),
+      address: address ? address.trim() : undefined
     });
 
     await newStudent.save();
@@ -26,21 +26,15 @@ exports.createStudent = async (req, res) => {
   } catch (err) {
     console.error('Create student error:', err);
     
-    // Handle unique constraint violations (code 11000)
+    // Mongoose-level fallback unique constraint violations
     if (err.code === 11000) {
       const duplicateField = Object.keys(err.keyPattern)[0];
       return res.status(400).json({
         success: false,
-        message: `A student with this ${duplicateField} already exists.`
-      });
-    }
-
-    // Handle mongoose validation errors
-    if (err.name === 'ValidationError') {
-      const messages = Object.values(err.errors).map(val => val.message);
-      return res.status(400).json({
-        success: false,
-        message: messages.join(', ')
+        message: 'Validation failed',
+        errors: [
+          { field: duplicateField, message: `A student with this ${duplicateField} already exists.` }
+        ]
       });
     }
 
@@ -113,14 +107,90 @@ exports.updateStudent = async (req, res) => {
       });
     }
 
-    // Assign fields if provided
-    if (name) student.name = name;
-    if (rollNo) student.rollNo = rollNo;
-    if (branch) student.branch = branch;
-    if (year) student.year = year;
-    if (email) student.email = email;
-    if (phone) student.phone = phone;
-    if (address !== undefined) student.address = address;
+    const errors = [];
+
+    // Email validation
+    if (email) {
+      const emailNormalized = email.toLowerCase().trim();
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(emailNormalized)) {
+        errors.push({ field: 'email', message: 'Please provide a valid email address' });
+      } else if (emailNormalized !== student.email) {
+        const existingEmail = await Student.findOne({ email: emailNormalized });
+        if (existingEmail) {
+          errors.push({ field: 'email', message: 'A student with this email already exists.' });
+        }
+      }
+      if (errors.length === 0) student.email = emailNormalized;
+    }
+
+    // Roll number validation
+    if (rollNo) {
+      const rollNoTrimmed = rollNo.trim();
+      if (!rollNoTrimmed) {
+        errors.push({ field: 'rollNo', message: 'Roll number is required' });
+      } else if (rollNoTrimmed !== student.rollNo) {
+        const existingRollNo = await Student.findOne({ rollNo: rollNoTrimmed });
+        if (existingRollNo) {
+          errors.push({ field: 'rollNo', message: 'A student with this roll number already exists.' });
+        }
+      }
+      if (errors.length === 0) student.rollNo = rollNoTrimmed;
+    }
+
+    // Branch validation
+    if (branch) {
+      const branchTrimmed = branch.trim().toUpperCase();
+      const allowedBranches = ['CSE', 'IT', 'ECE', 'ME', 'CE'];
+      if (!allowedBranches.includes(branchTrimmed)) {
+        errors.push({ field: 'branch', message: 'Branch must be one of CSE, IT, ECE, ME, CE' });
+      } else {
+        student.branch = branchTrimmed;
+      }
+    }
+
+    // Year validation
+    if (year !== undefined) {
+      const parsedYear = Number(year);
+      if (isNaN(parsedYear) || parsedYear < 1 || parsedYear > 4) {
+        errors.push({ field: 'year', message: 'Year must be an integer between 1 and 4' });
+      } else {
+        student.year = parsedYear;
+      }
+    }
+
+    // Phone validation
+    if (phone) {
+      const phoneTrimmed = phone.trim();
+      const phoneRegex = /^\d{10}$/;
+      if (!phoneRegex.test(phoneTrimmed)) {
+        errors.push({ field: 'phone', message: 'Phone number must be exactly 10 digits' });
+      } else {
+        student.phone = phoneTrimmed;
+      }
+    }
+
+    if (name) {
+      const nameTrimmed = name.trim();
+      if (!nameTrimmed) {
+        errors.push({ field: 'name', message: 'Name is required' });
+      } else {
+        student.name = nameTrimmed;
+      }
+    }
+
+    if (address !== undefined) {
+      student.address = address.trim();
+    }
+
+    // If any validation failed, return errors
+    if (errors.length > 0) {
+      return res.status(400).json({
+        success: false,
+        message: 'Validation failed',
+        errors
+      });
+    }
 
     await student.save();
 
@@ -133,26 +203,10 @@ exports.updateStudent = async (req, res) => {
   } catch (err) {
     console.error('Update student error:', err);
 
-    if (err.code === 11000) {
-      const duplicateField = Object.keys(err.keyPattern)[0];
-      return res.status(400).json({
-        success: false,
-        message: `A student with this ${duplicateField} already exists.`
-      });
-    }
-
     if (err.name === 'CastError') {
       return res.status(404).json({
         success: false,
         message: 'Student not found'
-      });
-    }
-
-    if (err.name === 'ValidationError') {
-      const messages = Object.values(err.errors).map(val => val.message);
-      return res.status(400).json({
-        success: false,
-        message: messages.join(', ')
       });
     }
 
@@ -193,6 +247,54 @@ exports.deleteStudent = async (req, res) => {
     return res.status(500).json({
       success: false,
       message: 'Server error. Failed to delete student.'
+    });
+  }
+};
+
+// Filter students by branch (GET /api/students/branch/:branch)
+exports.getStudentsByBranch = async (req, res) => {
+  try {
+    const branch = req.params.branch.toUpperCase().trim();
+    const students = await Student.find({ branch }).sort({ createdAt: -1 });
+    return res.status(200).json({
+      success: true,
+      message: `Students in branch ${branch} retrieved successfully`,
+      data: students
+    });
+  } catch (err) {
+    console.error('Filter students by branch error:', err);
+    return res.status(500).json({
+      success: false,
+      message: 'Server error. Failed to retrieve students by branch.'
+    });
+  }
+};
+
+// Filter students by year (GET /api/students/year/:year)
+exports.getStudentsByYear = async (req, res) => {
+  try {
+    const year = Number(req.params.year);
+    if (isNaN(year) || year < 1 || year > 4) {
+      return res.status(400).json({
+        success: false,
+        message: 'Validation failed',
+        errors: [
+          { field: 'year', message: 'Year must be an integer between 1 and 4' }
+        ]
+      });
+    }
+
+    const students = await Student.find({ year }).sort({ createdAt: -1 });
+    return res.status(200).json({
+      success: true,
+      message: `Students in year ${year} retrieved successfully`,
+      data: students
+    });
+  } catch (err) {
+    console.error('Filter students by year error:', err);
+    return res.status(500).json({
+      success: false,
+      message: 'Server error. Failed to retrieve students by year.'
     });
   }
 };

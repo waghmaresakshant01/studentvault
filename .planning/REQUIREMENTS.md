@@ -12,18 +12,18 @@
 - [x] **API-03**: GET `/api/students/:id` retrieves a single student record by MongoDB ID.
 - [x] **API-04**: PUT `/api/students/:id` updates a student record by ID.
 - [x] **API-05**: DELETE `/api/students/:id` deletes a student record by ID.
-- [ ] **API-06**: GET `/api/students/branch/:branch` retrieves student records filtered by branch.
-- [ ] **API-07**: GET `/api/students/year/:year` retrieves student records filtered by year.
+- [x] **API-06**: GET `/api/students/branch/:branch` retrieves student records filtered by branch.
+- [x] **API-07**: GET `/api/students/year/:year` retrieves student records filtered by year.
 - [x] **API-08**: Enforce standard JSON response format `{ success: true/false, message: "...", data: {...} }` for all endpoints.
 
 ### Backend Input Validation
 
-- [ ] **VAL-01**: Validation requires `name`, `rollNo`, `branch`, `year`, `email`, and `phone` to be present.
-- [ ] **VAL-02**: Enforce unique `rollNo` constraint.
-- [ ] **VAL-03**: Enforce unique `email` constraint and format regex.
-- [ ] **VAL-04**: Enforce `branch` to be one of the enum values: `CSE`, `IT`, `ECE`, `ME`, `CE`.
-- [ ] **VAL-05**: Enforce `year` to be an integer between 1 and 4.
-- [ ] **VAL-06**: Enforce `phone` to be exactly 10 digits.
+- [x] **VAL-01**: Validation requires `name`, `rollNo`, `branch`, `year`, `email`, and `phone` to be present.
+- [x] **VAL-02**: Enforce unique `rollNo` constraint.
+- [x] **VAL-03**: Enforce unique `email` constraint and format regex.
+- [x] **VAL-04**: Enforce `branch` to be one of the enum values: `CSE`, `IT`, `ECE`, `ME`, `CE`.
+- [x] **VAL-05**: Enforce `year` to be an integer between 1 and 4.
+- [x] **VAL-06**: Enforce `phone` to be exactly 10 digits.
 
 ### Frontend UI & Layout (Module 1)
 
@@ -67,14 +67,14 @@ Deferred to future release. Tracked but not in current roadmap.
 | API-04 | Phase 1 | Complete |
 | API-05 | Phase 1 | Complete |
 | API-08 | Phase 1 | Complete |
-| VAL-01 | Phase 2 | Pending |
-| VAL-02 | Phase 2 | Pending |
-| VAL-03 | Phase 2 | Pending |
-| VAL-04 | Phase 2 | Pending |
-| VAL-05 | Phase 2 | Pending |
-| VAL-06 | Phase 2 | Pending |
-| API-06 | Phase 2 | Pending |
-| API-07 | Phase 2 | Pending |
+| VAL-01 | Phase 2 | Complete |
+| VAL-02 | Phase 2 | Complete |
+| VAL-03 | Phase 2 | Complete |
+| VAL-04 | Phase 2 | Complete |
+| VAL-05 | Phase 2 | Complete |
+| VAL-06 | Phase 2 | Complete |
+| API-06 | Phase 2 | Complete |
+| API-07 | Phase 2 | Complete |
 | FE-01 | Phase 3 | Pending |
 | FE-02 | Phase 3 | Pending |
 | FE-03 | Phase 3 | Pending |
