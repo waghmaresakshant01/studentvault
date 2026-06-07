@@ -1,329 +1,444 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>StudentVault | Effortless Student Management</title>
-  <!-- Google Fonts: Outfit -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>StudentVault — Premium Academic Intelligence</title>
+  <meta name="description" content="StudentVault: A premium student management system with editorial design. Manage student records with precision and elegance." />
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Space+Mono:wght@400;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+  <!-- Material Symbols -->
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="style.css" />
+
+  <!-- Chart.js for Visual Analytics -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-  <!-- Floating Toast Notifications Container -->
-  <div id="toastContainer" class="toast-container" aria-live="polite"></div>
 
-  <!-- Navbar/Header -->
-  <header class="navbar">
-    <div class="navbar-container">
-      <div class="brand">
-        <div class="logo-icon">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9.004 9.004 0 008.716-6.747M12 21a9.004 9.004 0 01-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 017.843 4.582M12 3a8.997 8.997 0 00-7.843 4.582m15.686 0A11.953 11.953 0 0112 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0121 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0112 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 013 12c0-.778.099-1.533.284-2.253" />
-          </svg>
-        </div>
-        <div class="brand-text">
-          <h1>StudentVault</h1>
-          <p>Manage your college students effortlessly</p>
-        </div>
+  <!-- Film Grain Overlay -->
+  <div class="film-grain" aria-hidden="true"></div>
+
+  <!-- Toast Container -->
+  <div id="toastContainer" class="toast-container"></div>
+
+  <!-- Drawer Backdrop -->
+  <div id="drawerBackdrop" class="drawer-backdrop"></div>
+
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <!-- TOP NAVIGATION BAR                                      -->
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <nav id="topNav" class="top-nav">
+    <div class="nav-inner">
+      <a href="#" class="nav-brand">StudentVault</a>
+      <div class="nav-links">
+        <a href="#dashboard" class="nav-link active" id="navLinkDashboard">Dashboard</a>
+        <a href="#students" class="nav-link" id="navLinkStudents">Students</a>
+        <a href="#analytics" class="nav-link" id="navLinkAnalytics">Analytics</a>
+      </div>
+      <div class="nav-actions">
+        <button class="btn-primary" id="openDrawerBtnNav" style="width: auto; margin-top: 0; padding: 8px 18px; font-size: 0.75rem; border-radius: var(--radius-full); margin-right: 12px;">
+          <span class="material-symbols-outlined btn-icon" style="font-size: 16px;">add</span>
+          <span>New Record</span>
+        </button>
+        <button class="nav-icon-btn" aria-label="Notifications">
+          <span class="material-symbols-outlined">notifications</span>
+        </button>
+        <button class="nav-icon-btn" aria-label="Settings">
+          <span class="material-symbols-outlined">settings</span>
+        </button>
       </div>
     </div>
-  </header>
+  </nav>
 
-  <!-- Main Content Dashboard -->
-  <main class="dashboard">
-    <!-- Stats Deck Overview -->
-    <div class="stats-deck">
-      <div class="stats-card">
-        <div class="stats-card-icon total-icon">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.109A11.386 11.386 0 0012 20.25a11.38 11.38 0 00-2.214-.213m11.335-5.247c-.502-.914-.787-1.962-.787-3.076V11.25m-12.75 8v-.003c0-1.113.285-2.16.786-3.07M9 19.128v.109A11.386 11.386 0 0112 20.25c.772 0 1.514-.077 2.232-.224M9 19.128V19m0-.776c.502-.914.787-1.962.787-3.076V11.25m0-4.041a3 3 0 110-5.918 3 3 0 010 5.918zm0 10.128a8.987 8.987 0 014.124-7.53m0 0a3 3 0 110-5.917 3 3 0 010 5.917zm0 7.53a8.987 8.987 0 00-4.124-7.53m0 0a3 3 0 110-5.917 3 3 0 010 5.917z" />
-          </svg>
-        </div>
-        <div>
-          <div class="stats-num" id="statTotal">0</div>
-          <div class="stats-label">Total Students</div>
-        </div>
-      </div>
-      <div class="stats-card">
-        <div class="stats-card-icon cse-icon">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M14.25 9.75L16.5 12l-2.25 2.25m-4.5 0L7.5 12l2.25-2.25M6 20.25h12A2.25 2.25 0 0020.25 18V6A2.25 2.25 0 0018 3.75H6A2.25 2.25 0 003.75 6v12A2.25 2.25 0 006 20.25z" />
-          </svg>
-        </div>
-        <div>
-          <div class="stats-num" id="statCse">0</div>
-          <div class="stats-label">CSE Students</div>
-        </div>
-      </div>
-      <div class="stats-card">
-        <div class="stats-card-icon it-icon">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M9 17.25v1.007a3 3 0 01-.879 2.122L7.5 21h9l-.621-.621A3 3 0 0115 18.257V17.25m6-12V15a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 15V5.25m18 0A2.25 2.25 0 0018.75 3H5.25A2.25 2.25 0 003 5.25m18 0V12a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 12V5.25" />
-          </svg>
-        </div>
-        <div>
-          <div class="stats-num" id="statIt">0</div>
-          <div class="stats-label">IT Students</div>
-        </div>
-      </div>
-      <div class="stats-card">
-        <div class="stats-card-icon ece-icon">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M8.288 15.038a5.25 5.25 0 017.424 0M5.106 11.856c3.807-3.808 9.98-3.808 13.788 0M1.924 8.674c5.565-5.565 14.587-5.565 20.152 0M12.53 18.22a1.65 1.65 0 11-1.06 0 1.65 1.65 0 011.06 0z" />
-          </svg>
-        </div>
-        <div>
-          <div class="stats-num" id="statEce">0</div>
-          <div class="stats-label">ECE Students</div>
-        </div>
-      </div>
-    </div>
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <!-- MAIN CONTENT                                            -->
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <main class="main-content">
 
-    <div class="dashboard-grid">
-      
-      <!-- Left Column: Add Student Form Panel -->
-      <section class="panel form-panel">
-        <div class="panel-header">
-          <h2>Add New Student</h2>
-          <p>Register a student record into the vault database</p>
-        </div>
-        
-        <form id="studentForm" novalidate>
-          <div class="form-group">
-            <label for="nameInput">Full Name</label>
-            <input type="text" id="nameInput" placeholder="e.g. John Doe" required>
-          </div>
+    <!-- ── VIEW SECTION: DASHBOARD ───────────────────────────── -->
+    <section id="dashboardView" class="view-section active">
+      <!-- Hero Header -->
+      <header class="hero-header" id="heroHeader">
+        <h1 class="hero-title">
+          Manage your students<br />
+          <span class="hero-accent">with precision.</span>
+        </h1>
+        <p class="hero-subtitle">Premium Academic Intelligence System · StudentVault v2.4</p>
+      </header>
 
-          <div class="form-row">
-            <div class="form-group">
-              <label for="rollNoInput">Roll Number</label>
-              <input type="text" id="rollNoInput" placeholder="e.g. CS2026002" required>
+      <!-- STATS DECK -->
+      <section class="stats-deck" aria-label="Statistics overview">
+        <div class="stat-card">
+          <span class="stat-label">Total Students</span>
+          <span class="stat-value" id="statTotal">0</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-label">CSE</span>
+          <span class="stat-value" id="statCse">0</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-label">IT</span>
+          <span class="stat-value" id="statIt">0</span>
+        </div>
+        <div class="stat-card stat-card--accent">
+          <span class="stat-label">ECE</span>
+          <span class="stat-value" id="statEce">0</span>
+        </div>
+      </section>
+
+      <!-- DASHBOARD QUICK ACTIONS & RECENTS GRID -->
+      <div class="dashboard-grid">
+        <!-- Quick Actions Panel -->
+        <div class="quick-actions-panel">
+          <h2 class="dashboard-section-title">Quick Actions</h2>
+          <div class="quick-actions-grid">
+            <div class="action-card glass-card" id="actionCardRegister">
+              <span class="material-symbols-outlined action-card__icon">person_add</span>
+              <div class="action-card__content">
+                <h3 class="action-card__title">Add Student</h3>
+                <p class="action-card__description">Register a new student record into the system.</p>
+              </div>
+              <span class="material-symbols-outlined action-card__arrow">arrow_forward</span>
             </div>
             
-            <div class="form-group">
-              <label for="phoneInput">Phone Number</label>
-              <input type="tel" id="phoneInput" placeholder="10-digit number" required>
-            </div>
-          </div>
-
-          <div class="form-row">
-            <div class="form-group">
-              <label for="branchInput">Branch</label>
-              <select id="branchInput" required>
-                <option value="" disabled selected>Select branch</option>
-                <option value="CSE">CSE</option>
-                <option value="IT">IT</option>
-                <option value="ECE">ECE</option>
-                <option value="ME">ME</option>
-                <option value="CE">CE</option>
-              </select>
-            </div>
-
-            <div class="form-group">
-              <label for="yearInput">Academic Year</label>
-              <select id="yearInput" required>
-                <option value="" disabled selected>Select year</option>
-                <option value="1">1st Year</option>
-                <option value="2">2nd Year</option>
-                <option value="3">3rd Year</option>
-                <option value="4">4th Year</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label for="emailInput">Email Address</label>
-            <input type="email" id="emailInput" placeholder="e.g. john@studentvault.com" required>
-          </div>
-
-          <div class="form-group">
-            <label for="addressInput">Residential Address</label>
-            <textarea id="addressInput" rows="2" placeholder="e.g. 123 Campus Lane, Hostel 4"></textarea>
-          </div>
-
-          <button type="submit" id="submitBtn" class="btn btn-primary">
-            <span>Register Student</span>
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="btn-icon">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-            </svg>
-          </button>
-        </form>
-      </section>
-
-      <!-- Right Column: Student Table Directory -->
-      <section class="panel table-panel">
-        <div class="panel-header table-header-flex">
-          <div>
-            <h2>Student Directory</h2>
-            <p>List of all registered students</p>
-          </div>
-          <div class="counter-badge">
-            <span class="badge-label">Active Listing:</span>
-            <span id="studentCount" class="badge-value">0</span>
+            <a href="#students" class="action-card glass-card">
+              <span class="material-symbols-outlined action-card__icon">directory_sync</span>
+              <div class="action-card__content">
+                <h3 class="action-card__title">View Directory</h3>
+                <p class="action-card__description">Browse, search, edit, or delete existing student files.</p>
+              </div>
+              <span class="material-symbols-outlined action-card__arrow">arrow_forward</span>
+            </a>
+            
+            <a href="#analytics" class="action-card glass-card">
+              <span class="material-symbols-outlined action-card__icon">monitoring</span>
+              <div class="action-card__content">
+                <h3 class="action-card__title">Visual Reports</h3>
+                <p class="action-card__description">Analyze demographics, branch, and enrollment statistics.</p>
+              </div>
+              <span class="material-symbols-outlined action-card__arrow">arrow_forward</span>
+            </a>
           </div>
         </div>
 
-        <!-- Search and Filter Controls Row -->
-        <div class="search-filter-controls">
-          <div class="search-box">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="search-icon">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.602 10.602z" />
-            </svg>
-            <input type="text" id="searchInput" placeholder="Search by name or roll number...">
-          </div>
-          <div class="filter-dropdowns">
-            <select id="filterBranch">
-              <option value="">All Branches</option>
-              <option value="CSE">CSE</option>
-              <option value="IT">IT</option>
-              <option value="ECE">ECE</option>
-              <option value="ME">ME</option>
-              <option value="CE">CE</option>
-            </select>
-            <select id="filterYear">
-              <option value="">All Years</option>
-              <option value="1">1st Year</option>
-              <option value="2">2nd Year</option>
-              <option value="3">3rd Year</option>
-              <option value="4">4th Year</option>
-            </select>
-            <button id="clearFiltersBtn" class="btn-clear" title="Reset Filters">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
-              </svg>
-              <span>Reset</span>
-            </button>
+        <!-- Recent Registrations -->
+        <div class="recent-panel glass-card">
+          <h2 class="dashboard-section-title">Recent Registrations</h2>
+          <div id="recentList" class="recent-list">
+            <!-- Dynamic list elements will be injected here -->
           </div>
         </div>
+      </div>
+    </section>
 
-        <!-- Table Container -->
-        <div class="table-container">
-          <table id="studentsTable">
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Roll No</th>
-                <th>Branch & Year</th>
-                <th>Contact Details</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody id="studentTableBody">
-              <!-- Dynamically populated rows -->
-            </tbody>
-          </table>
-          
-          <!-- Empty State -->
-          <div id="emptyState" class="empty-state">
-            <div class="empty-icon">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
-              </svg>
+    <!-- ── VIEW SECTION: STUDENTS DIRECTORY ───────────────────── -->
+    <section id="studentsView" class="view-section">
+      <div class="workspace">
+        <!-- RIGHT: Table Panel -->
+        <section class="table-panel">
+          <div class="glass-card table-card">
+
+            <!-- Filter Bar -->
+            <div class="filter-bar">
+              <div class="search-field">
+                <span class="material-symbols-outlined search-icon">search</span>
+                <input type="text" id="searchInput" class="search-input" placeholder="Search records…" />
+              </div>
+              <div class="filter-group">
+                <select id="filterBranch" class="filter-select">
+                  <option value="">All Branches</option>
+                  <option value="CSE">CSE</option>
+                  <option value="IT">IT</option>
+                  <option value="ECE">ECE</option>
+                  <option value="ME">ME</option>
+                  <option value="CE">CE</option>
+                </select>
+                <select id="filterYear" class="filter-select">
+                  <option value="">All Years</option>
+                  <option value="1">1st</option>
+                  <option value="2">2nd</option>
+                  <option value="3">3rd</option>
+                  <option value="4">4th</option>
+                </select>
+                <button id="clearFiltersBtn" class="btn-ghost" title="Clear all filters">
+                  <span class="material-symbols-outlined">filter_alt_off</span>
+                </button>
+              </div>
+              <button id="openDrawerBtnTable" class="btn-primary" style="width: auto; margin-top: 0; padding: 10px 18px; font-size: 0.75rem;">
+                <span class="material-symbols-outlined btn-icon" style="font-size: 16px;">add</span>
+                <span>Register Student</span>
+              </button>
             </div>
-            <h3>No Students Found</h3>
-            <p>Add a student or adjust filters to populate the directory.</p>
+
+            <!-- Student Count -->
+            <div class="table-meta">
+              <span class="table-meta__label">Records</span>
+              <span class="table-meta__count" id="studentCount">0</span>
+            </div>
+
+            <!-- Data Table -->
+            <div class="table-scroll">
+              <table id="studentsTable" class="data-table">
+                <thead>
+                  <tr>
+                    <th>Student</th>
+                    <th>Roll No</th>
+                    <th>Branch / Year</th>
+                    <th>Contact</th>
+                    <th class="th-right">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="studentTableBody">
+                  <!-- Dynamic rows injected by app.js -->
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Empty State -->
+            <div id="emptyState" class="empty-state" style="display: none;">
+              <span class="material-symbols-outlined empty-icon">school</span>
+              <p class="empty-title">No records found</p>
+              <p class="empty-sub">Register a new student to get started.</p>
+            </div>
+
           </div>
+        </section>
+      </div>
+    </section>
+
+    <!-- ── VIEW SECTION: ANALYTICS ────────────────────────────── -->
+    <section id="analyticsView" class="view-section">
+      <div class="analytics-header">
+        <h2 class="analytics-title">Visual Reports<br /><span class="hero-accent">&amp; Intelligence</span></h2>
+        <p class="analytics-subtitle">Real-time charts compiling student enrollment data distributions</p>
+      </div>
+
+      <!-- Analytics Quick Stats -->
+      <div class="analytics-stats-row" id="analyticsStatsRow">
+        <div class="analytics-stat-card">
+          <span class="analytics-stat-label">Total Enrolled</span>
+          <span class="analytics-stat-value" id="aStatTotal">0</span>
+          <span class="analytics-stat-sub">across all branches</span>
         </div>
-      </section>
-
-    </div>
-  </main>
-
-  <!-- Edit Student Modal Overlay -->
-  <div id="editModal" class="modal-overlay" aria-modal="true" role="dialog">
-    <div class="modal-content panel">
-      <div class="panel-header">
-        <h2>Edit Student Record</h2>
-        <p>Modify student information in the vault database</p>
+        <div class="analytics-stat-card">
+          <span class="analytics-stat-label">Top Branch</span>
+          <span class="analytics-stat-value" id="aStatTopBranch">—</span>
+          <span class="analytics-stat-sub" id="aStatTopBranchCount">no data yet</span>
+        </div>
+        <div class="analytics-stat-card">
+          <span class="analytics-stat-label">Most Active Year</span>
+          <span class="analytics-stat-value" id="aStatTopYear">—</span>
+          <span class="analytics-stat-sub" id="aStatTopYearCount">no data yet</span>
+        </div>
       </div>
       
-      <form id="editForm" novalidate>
-        <input type="hidden" id="editIdInput">
+      <div class="analytics-grid">
+        <div class="glass-card chart-card-container">
+          <h3 class="chart-card-title">Branch Distribution</h3>
+          <div class="chart-wrapper">
+            <canvas id="branchChart"></canvas>
+          </div>
+        </div>
         
-        <div class="form-group">
-          <label for="editNameInput">Full Name</label>
-          <input type="text" id="editNameInput" required>
-        </div>
-
-        <div class="form-row">
-          <div class="form-group">
-            <label for="editRollNoInput">Roll Number</label>
-            <input type="text" id="editRollNoInput" required>
-          </div>
-          
-          <div class="form-group">
-            <label for="editPhoneInput">Phone Number</label>
-            <input type="tel" id="editPhoneInput" required>
+        <div class="glass-card chart-card-container">
+          <h3 class="chart-card-title">Year-wise Enrollment</h3>
+          <div class="chart-wrapper">
+            <canvas id="yearChart"></canvas>
           </div>
         </div>
+      </div>
+    </section>
 
-        <div class="form-row">
-          <div class="form-group">
-            <label for="editBranchInput">Branch</label>
-            <select id="editBranchInput" required>
-              <option value="CSE">CSE</option>
-              <option value="IT">IT</option>
-              <option value="ECE">ECE</option>
-              <option value="ME">ME</option>
-              <option value="CE">CE</option>
+
+  </main>
+
+  <!-- LEFT: Registration Form (Slide-out Drawer) -->
+  <aside class="form-panel form-drawer" id="formDrawer">
+    <!-- Close Button -->
+    <button class="drawer-close-btn" id="closeDrawerBtn" aria-label="Close Registration Panel">
+      <span class="material-symbols-outlined">close</span>
+    </button>
+
+    <div class="glass-card form-card">
+      <h2 class="form-card__title">New Record</h2>
+
+      <form id="studentForm" novalidate>
+        <!-- Name -->
+        <div class="field-group">
+          <input type="text" id="nameInput" class="floating-input" placeholder=" " required />
+          <label for="nameInput" class="floating-label">Full Name</label>
+        </div>
+        <!-- Roll Number -->
+        <div class="field-group">
+          <input type="text" id="rollNoInput" class="floating-input" placeholder=" " required />
+          <label for="rollNoInput" class="floating-label">Roll Number</label>
+        </div>
+        <!-- Email -->
+        <div class="field-group">
+          <input type="email" id="emailInput" class="floating-input" placeholder=" " required />
+          <label for="emailInput" class="floating-label">Email Address</label>
+        </div>
+        <!-- Phone -->
+        <div class="field-group">
+          <input type="tel" id="phoneInput" class="floating-input" placeholder=" " required />
+          <label for="phoneInput" class="floating-label">Phone Number</label>
+        </div>
+        <!-- Branch + Year Row -->
+        <div class="field-row">
+          <div class="field-group field-group--select">
+            <select id="branchInput" class="floating-input" required>
+              <option disabled selected value="">—</option>
+              <option value="CSE">Computer Science</option>
+              <option value="IT">Information Tech</option>
+              <option value="ECE">Electronics</option>
+              <option value="ME">Mechanical</option>
+              <option value="CE">Civil</option>
             </select>
+            <label for="branchInput" class="floating-label floating-label--select">Branch</label>
+            <span class="material-symbols-outlined select-chevron">expand_more</span>
           </div>
-
-          <div class="form-group">
-            <label for="editYearInput">Academic Year</label>
-            <select id="editYearInput" required>
+          <div class="field-group field-group--select">
+            <select id="yearInput" class="floating-input" required>
+              <option disabled selected value="">—</option>
               <option value="1">1st Year</option>
               <option value="2">2nd Year</option>
               <option value="3">3rd Year</option>
               <option value="4">4th Year</option>
             </select>
+            <label for="yearInput" class="floating-label floating-label--select">Year</label>
+            <span class="material-symbols-outlined select-chevron">expand_more</span>
           </div>
         </div>
-
-        <div class="form-group">
-          <label for="editEmailInput">Email Address</label>
-          <input type="email" id="editEmailInput" required>
+        <!-- Address (optional) -->
+        <div class="field-group">
+          <input type="text" id="addressInput" class="floating-input" placeholder=" " />
+          <label for="addressInput" class="floating-label">Address (optional)</label>
         </div>
+        <!-- Submit -->
+        <button type="submit" class="btn-primary" id="submitBtn">
+          <span class="material-symbols-outlined btn-icon">person_add</span>
+          Register Student
+        </button>
+      </form>
+    </div>
+  </aside>
 
-        <div class="form-group">
-          <label for="editAddressInput">Residential Address</label>
-          <textarea id="editAddressInput" rows="2"></textarea>
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <!-- EDIT MODAL                                              -->
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <div id="editModal" class="modal-overlay">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h2 class="modal-title">Edit Student Record</h2>
+        <button id="closeEditModalBtn" class="modal-close" aria-label="Close modal">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+      <div class="modal-divider">
+        <span class="modal-section-label">Student Information</span>
+      </div>
+      <form id="editForm" novalidate>
+        <input type="hidden" id="editIdInput" />
+        <div class="field-group">
+          <input type="text" id="editNameInput" class="floating-input" placeholder=" " required />
+          <label for="editNameInput" class="floating-label">Full Name</label>
         </div>
-
+        <div class="field-group">
+          <input type="text" id="editRollNoInput" class="floating-input" placeholder=" " required />
+          <label for="editRollNoInput" class="floating-label">Roll Number</label>
+        </div>
+        <div class="field-group">
+          <input type="email" id="editEmailInput" class="floating-input" placeholder=" " required />
+          <label for="editEmailInput" class="floating-label">Email Address</label>
+        </div>
+        <div class="field-group">
+          <input type="tel" id="editPhoneInput" class="floating-input" placeholder=" " required />
+          <label for="editPhoneInput" class="floating-label">Phone Number</label>
+        </div>
+        <div class="field-row">
+          <div class="field-group field-group--select">
+            <select id="editBranchInput" class="floating-input" required>
+              <option disabled value="">—</option>
+              <option value="CSE">Computer Science</option>
+              <option value="IT">Information Tech</option>
+              <option value="ECE">Electronics</option>
+              <option value="ME">Mechanical</option>
+              <option value="CE">Civil</option>
+            </select>
+            <label for="editBranchInput" class="floating-label floating-label--select">Branch</label>
+            <span class="material-symbols-outlined select-chevron">expand_more</span>
+          </div>
+          <div class="field-group field-group--select">
+            <select id="editYearInput" class="floating-input" required>
+              <option disabled value="">—</option>
+              <option value="1">1st Year</option>
+              <option value="2">2nd Year</option>
+              <option value="3">3rd Year</option>
+              <option value="4">4th Year</option>
+            </select>
+            <label for="editYearInput" class="floating-label floating-label--select">Year</label>
+            <span class="material-symbols-outlined select-chevron">expand_more</span>
+          </div>
+        </div>
+        <div class="field-group">
+          <input type="text" id="editAddressInput" class="floating-input" placeholder=" " />
+          <label for="editAddressInput" class="floating-label">Address (optional)</label>
+        </div>
         <div class="modal-actions">
-          <button type="button" id="closeEditModalBtn" class="btn btn-secondary">Cancel</button>
-          <button type="submit" id="saveEditBtn" class="btn btn-primary">Save Changes</button>
+          <button type="button" class="btn-outline" id="cancelEditBtn">Cancel</button>
+          <button type="submit" class="btn-primary">
+            <span class="material-symbols-outlined btn-icon">save</span>
+            Update Student
+          </button>
         </div>
       </form>
     </div>
   </div>
 
-  <!-- Delete Confirmation Modal Overlay -->
-  <div id="deleteModal" class="modal-overlay" aria-modal="true" role="dialog">
-    <div class="modal-content panel delete-confirm-panel">
-      <div class="panel-header">
-        <h2>Confirm Deletion</h2>
-        <p>Are you sure you want to permanently delete this student record from the vault?</p>
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <!-- DELETE CONFIRMATION MODAL                               -->
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <div id="deleteModal" class="modal-overlay">
+    <div class="modal-card modal-card--sm">
+      <div class="modal-header">
+        <h2 class="modal-title">Confirm Deletion</h2>
+        <button id="closeDeleteModalBtn" class="modal-close" aria-label="Close modal">
+          <span class="material-symbols-outlined">close</span>
+        </button>
       </div>
-      
-      <div class="student-to-delete-info" id="deleteDetails">
-        <!-- Filled dynamically -->
+      <p class="modal-body-text">This action is permanent and cannot be undone.</p>
+      <div class="modal-divider">
+        <span class="modal-section-label">Record Details</span>
       </div>
-      
-      <p class="delete-warning">Warning: This action cannot be undone and will delete the record permanently.</p>
-
+      <div id="deleteDetails" class="delete-details"></div>
       <div class="modal-actions">
-        <button type="button" id="closeDeleteModalBtn" class="btn btn-secondary">Cancel</button>
-        <button type="button" id="confirmDeleteBtn" class="btn btn-danger">Delete Record</button>
+        <button type="button" class="btn-outline" id="cancelDeleteBtn">Cancel</button>
+        <button type="button" class="btn-danger" id="confirmDeleteBtn">
+          <span class="material-symbols-outlined btn-icon">delete</span>
+          Delete Student
+        </button>
       </div>
     </div>
   </div>
 
-  <footer class="footer">
-    <div class="footer-container">
-      <p>&copy; 2026 StudentVault Systems. All rights reserved.</p>
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <!-- FOOTER                                                  -->
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-brand">© 2024 StudentVault. Premium Academic Intelligence.</div>
+      <div class="footer-links">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+        <a href="#">Documentation</a>
+      </div>
     </div>
   </footer>
 

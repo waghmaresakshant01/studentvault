@@ -1,6 +1,15 @@
 const Student = require('../models/Student');
+const firebaseService = require('../services/firebaseStudentService');
 
-// Add Student (POST /api/students) - Input validation is pre-checked by middleware
+// ─── Helper: fire-and-forget Firebase sync ────────────────────────────────
+// Errors are logged but NEVER block the API response (MongoDB is source of truth)
+function fbSync(operation, ...args) {
+  firebaseService[operation](...args).catch(err =>
+    console.error(`[Firebase Sync] ${operation} failed:`, err.message)
+  );
+}
+
+// ─── Add Student (POST /api/students) ─────────────────────────────────────
 exports.createStudent = async (req, res) => {
   try {
     const { name, rollNo, branch, year, email, phone, address } = req.body;
@@ -17,6 +26,9 @@ exports.createStudent = async (req, res) => {
 
     await newStudent.save();
 
+    // 🔥 Non-blocking Firebase sync (does not delay the response)
+    fbSync('syncCreate', newStudent);
+
     return res.status(201).json({
       success: true,
       message: 'Student added successfully',
@@ -25,8 +37,7 @@ exports.createStudent = async (req, res) => {
 
   } catch (err) {
     console.error('Create student error:', err);
-    
-    // Mongoose-level fallback unique constraint violations
+
     if (err.code === 11000) {
       const duplicateField = Object.keys(err.keyPattern)[0];
       return res.status(400).json({
@@ -45,7 +56,7 @@ exports.createStudent = async (req, res) => {
   }
 };
 
-// Get All Students (GET /api/students)
+// ─── Get All Students (GET /api/students) — reads from MongoDB ────────────
 exports.getAllStudents = async (req, res) => {
   try {
     const students = await Student.find().sort({ createdAt: -1 });
@@ -63,17 +74,33 @@ exports.getAllStudents = async (req, res) => {
   }
 };
 
-// Get One Student (GET /api/students/:id)
+// ─── Get All Students from Firebase mirror (GET /api/students/firebase) ───
+exports.getStudentsFromFirebase = async (req, res) => {
+  try {
+    const students = await firebaseService.getAll();
+    return res.status(200).json({
+      success: true,
+      message: `Students retrieved from Firestore (${students.length} records)`,
+      source: 'firebase',
+      data: students
+    });
+  } catch (err) {
+    console.error('Get students from Firebase error:', err);
+    return res.status(503).json({
+      success: false,
+      message: 'Firebase Firestore unavailable. Check credentials and connectivity.',
+      error: err.message
+    });
+  }
+};
+
+// ─── Get One Student (GET /api/students/:id) ──────────────────────────────
 exports.getStudentById = async (req, res) => {
   try {
     const student = await Student.findById(req.params.id);
     if (!student) {
-      return res.status(404).json({
-        success: false,
-        message: 'Student not found'
-      });
+      return res.status(404).json({ success: false, message: 'Student not found' });
     }
-
     return res.status(200).json({
       success: true,
       message: 'Student retrieved successfully',
@@ -82,10 +109,7 @@ exports.getStudentById = async (req, res) => {
   } catch (err) {
     console.error('Get student by ID error:', err);
     if (err.name === 'CastError') {
-      return res.status(404).json({
-        success: false,
-        message: 'Student not found'
-      });
+      return res.status(404).json({ success: false, message: 'Student not found' });
     }
     return res.status(500).json({
       success: false,
@@ -94,17 +118,14 @@ exports.getStudentById = async (req, res) => {
   }
 };
 
-// Update Student (PUT /api/students/:id)
+// ─── Update Student (PUT /api/students/:id) ───────────────────────────────
 exports.updateStudent = async (req, res) => {
   try {
     const { name, rollNo, branch, year, email, phone, address } = req.body;
 
     const student = await Student.findById(req.params.id);
     if (!student) {
-      return res.status(404).json({
-        success: false,
-        message: 'Student not found'
-      });
+      return res.status(404).json({ success: false, message: 'Student not found' });
     }
 
     const errors = [];
@@ -183,16 +204,14 @@ exports.updateStudent = async (req, res) => {
       student.address = address.trim();
     }
 
-    // If any validation failed, return errors
     if (errors.length > 0) {
-      return res.status(400).json({
-        success: false,
-        message: 'Validation failed',
-        errors
-      });
+      return res.status(400).json({ success: false, message: 'Validation failed', errors });
     }
 
     await student.save();
+
+    // 🔥 Non-blocking Firebase sync
+    fbSync('syncUpdate', req.params.id, student);
 
     return res.status(200).json({
       success: true,
@@ -202,14 +221,9 @@ exports.updateStudent = async (req, res) => {
 
   } catch (err) {
     console.error('Update student error:', err);
-
     if (err.name === 'CastError') {
-      return res.status(404).json({
-        success: false,
-        message: 'Student not found'
-      });
+      return res.status(404).json({ success: false, message: 'Student not found' });
     }
-
     return res.status(500).json({
       success: false,
       message: 'Server error. Failed to update student.'
@@ -217,18 +231,18 @@ exports.updateStudent = async (req, res) => {
   }
 };
 
-// Delete Student (DELETE /api/students/:id)
+// ─── Delete Student (DELETE /api/students/:id) ────────────────────────────
 exports.deleteStudent = async (req, res) => {
   try {
     const student = await Student.findById(req.params.id);
     if (!student) {
-      return res.status(404).json({
-        success: false,
-        message: 'Student not found'
-      });
+      return res.status(404).json({ success: false, message: 'Student not found' });
     }
 
     await Student.findByIdAndDelete(req.params.id);
+
+    // 🔥 Non-blocking Firebase sync
+    fbSync('syncDelete', req.params.id);
 
     return res.status(200).json({
       success: true,
@@ -239,10 +253,7 @@ exports.deleteStudent = async (req, res) => {
   } catch (err) {
     console.error('Delete student error:', err);
     if (err.name === 'CastError') {
-      return res.status(404).json({
-        success: false,
-        message: 'Student not found'
-      });
+      return res.status(404).json({ success: false, message: 'Student not found' });
     }
     return res.status(500).json({
       success: false,
@@ -251,7 +262,7 @@ exports.deleteStudent = async (req, res) => {
   }
 };
 
-// Filter students by branch (GET /api/students/branch/:branch)
+// ─── Filter by Branch (GET /api/students/branch/:branch) ─────────────────
 exports.getStudentsByBranch = async (req, res) => {
   try {
     const branch = req.params.branch.toUpperCase().trim();
@@ -270,7 +281,7 @@ exports.getStudentsByBranch = async (req, res) => {
   }
 };
 
-// Filter students by year (GET /api/students/year/:year)
+// ─── Filter by Year (GET /api/students/year/:year) ────────────────────────
 exports.getStudentsByYear = async (req, res) => {
   try {
     const year = Number(req.params.year);
@@ -278,9 +289,7 @@ exports.getStudentsByYear = async (req, res) => {
       return res.status(400).json({
         success: false,
         message: 'Validation failed',
-        errors: [
-          { field: 'year', message: 'Year must be an integer between 1 and 4' }
-        ]
+        errors: [{ field: 'year', message: 'Year must be an integer between 1 and 4' }]
       });
     }
 

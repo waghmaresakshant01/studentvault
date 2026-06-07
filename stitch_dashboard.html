@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>StudentVault - Premium Student Management Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&amp;family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&amp;family=Inter:wght@300;400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        black: {
+                            DEFAULT: '#0D0D0D',
+                        },
+                        amber: {
+                            DEFAULT: '#FF9500',
+                            hover: '#E08300',
+                        },
+                        glass: {
+                            light: 'rgba(255, 255, 255, 0.05)',
+                            border: 'rgba(255, 255, 255, 0.1)',
+                        }
+                    },
+                    fontFamily: {
+                        headline: ["Playfair Display", "serif"],
+                        display: ["Playfair Display", "serif"],
+                        body: ["Inter", "sans-serif"],
+                        label: ["Space Mono", "monospace"]
+                    },
+                    backgroundImage: {
+                        'grain': 'url("data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.65%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22 opacity=%220.05%22/%3E%3C/svg%3E")',
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            background-color: #0D0D0D;
+            color: #ffffff;
+            font-family: 'Inter', sans-serif;
+        }
+        .grain-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 50;
+            opacity: 0.3;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+        }
+        /* Floating Labels */
+        .floating-input {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+        .floating-input:focus {
+            border-color: #FF9500;
+            box-shadow: none;
+        }
+        .floating-label {
+            position: absolute;
+            left: 1rem;
+            top: 1rem;
+            color: rgba(255, 255, 255, 0.5);
+            font-family: 'Space Mono', monospace;
+            font-size: 0.875rem;
+            transition: all 0.2s ease;
+            pointer-events: none;
+        }
+        .floating-input:focus ~ .floating-label,
+        .floating-input:not(:placeholder-shown) ~ .floating-label {
+            top: 0.25rem;
+            font-size: 0.65rem;
+            color: #FF9500;
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+<body class="antialiased min-h-screen relative overflow-x-hidden pt-20">
+<!-- TopNavBar -->
+<nav class="fixed top-0 w-full z-50 bg-[#0D0D0D]/80 backdrop-blur-md border-b border-white/10 shadow-2xl">
+<div class="flex justify-between items-center h-20 px-8 max-w-[1440px] mx-auto">
+<div class="font-headline text-2xl font-bold tracking-tighter text-[#FF9500]">
+                StudentVault
+            </div>
+<!-- Navigation Links (Web) -->
+<div class="hidden md:flex items-center gap-8 font-headline text-headline font-serif italic">
+<a class="text-[#FF9500] border-b-2 border-[#FF9500] pb-1 font-medium active:scale-95 transition-transform hover:bg-white/5 transition-all duration-300" href="#">Dashboard</a>
+<a class="text-white/70 hover:text-white transition-colors active:scale-95 transition-transform hover:bg-white/5 transition-all duration-300" href="#">Students</a>
+<a class="text-white/70 hover:text-white transition-colors active:scale-95 transition-transform hover:bg-white/5 transition-all duration-300" href="#">Analytics</a>
+</div>
+<div class="flex items-center gap-4">
+<button class="text-white/70 hover:text-white transition-colors hover:bg-white/5 transition-all duration-300 p-2 rounded-full">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="text-white/70 hover:text-white transition-colors hover:bg-white/5 transition-all duration-300 p-2 rounded-full">
+<span class="material-symbols-outlined">settings</span>
+</button>
+<div class="w-10 h-10 rounded-full bg-glass-light border border-glass-border overflow-hidden ml-2">
+<img alt="User profile" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDhZOghLaSevjfVzGt7HxguCfpgXG3DzGpQaZOpMRSQ4PEeEWXtf_HE_gfCjHJhuYcaa9NmKaW71T_fg8RRvTmMbvUfcpiFFiGibFvD2f56tTwcw7raLB0-c0-iBGexWvQxNWVT6PU7heZIby6qwWdPTBM2hVWIkfZDQpZrjvDq_3dm3zwnzFwNatca4s9lhRAI3oTuEqy2u8Od97IAUsVzWnlus_5pXAuSuiJkDqQ_ZoiQsI2MwwGLIOn-C87NyIeQsgO6bpHnp_4"/>
+</div>
+</div>
+</div>
+</nav>
+<!-- Main Content Container -->
+<main class="max-w-[1440px] mx-auto px-8 py-12 relative z-10">
+<!-- Hero Section -->
+<header class="mb-16 mt-8">
+<h1 class="font-headline text-5xl md:text-7xl font-medium tracking-tight mb-4">
+                Manage your students<br/><span class="text-amber italic">with precision.</span>
+</h1>
+<p class="font-label text-white/50 uppercase tracking-widest text-sm max-w-2xl mt-6">
+                Premium Academic Intelligence System. Version 2.4.0.
+            </p>
+</header>
+<!-- Stats Section -->
+<section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
+<div class="glass-card p-6 flex flex-col justify-between hover:bg-white/5 transition-colors duration-300">
+<span class="font-label text-white/40 uppercase text-xs tracking-wider mb-4 block">Total Students</span>
+<span class="font-headline text-5xl font-semibold">247</span>
+</div>
+<div class="glass-card p-6 flex flex-col justify-between hover:bg-white/5 transition-colors duration-300">
+<span class="font-label text-white/40 uppercase text-xs tracking-wider mb-4 block">Branches</span>
+<span class="font-headline text-5xl font-semibold">6</span>
+</div>
+<div class="glass-card p-6 flex flex-col justify-between hover:bg-white/5 transition-colors duration-300">
+<span class="font-label text-white/40 uppercase text-xs tracking-wider mb-4 block">Average Year</span>
+<span class="font-headline text-5xl font-semibold">2.8</span>
+</div>
+<div class="glass-card p-6 flex flex-col justify-between hover:bg-white/5 transition-colors duration-300 border-amber/30">
+<span class="font-label text-amber uppercase text-xs tracking-wider mb-4 block">This Month</span>
+<span class="font-headline text-5xl font-semibold text-amber">+23</span>
+</div>
+</section>
+<!-- Workspace Layout -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+<!-- Left Column: Registration Form -->
+<div class="lg:col-span-4">
+<div class="glass-card p-8 sticky top-28">
+<h2 class="font-headline text-2xl mb-8 border-b border-white/10 pb-4">New Record</h2>
+<form class="space-y-6">
+<div class="relative">
+<input class="floating-input w-full rounded-md pt-5 pb-2 px-4 focus:ring-0" id="name" placeholder=" " type="text"/>
+<label class="floating-label" for="name">Full Name</label>
+</div>
+<div class="relative">
+<input class="floating-input w-full rounded-md pt-5 pb-2 px-4 focus:ring-0" id="roll" placeholder=" " type="text"/>
+<label class="floating-label" for="roll">Roll Number</label>
+</div>
+<div class="relative">
+<input class="floating-input w-full rounded-md pt-5 pb-2 px-4 focus:ring-0" id="email" placeholder=" " type="email"/>
+<label class="floating-label" for="email">Email Address</label>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div class="relative">
+<select class="floating-input w-full rounded-md pt-5 pb-2 px-4 focus:ring-0 appearance-none" id="branch">
+<option disabled="" selected="" value=""></option>
+<option value="CS">Computer Science</option>
+<option value="EE">Electrical</option>
+<option value="ME">Mechanical</option>
+</select>
+<label class="floating-label" for="branch">Branch</label>
+<span class="material-symbols-outlined absolute right-3 top-4 text-white/50 pointer-events-none">expand_more</span>
+</div>
+<div class="relative">
+<select class="floating-input w-full rounded-md pt-5 pb-2 px-4 focus:ring-0 appearance-none" id="year">
+<option disabled="" selected="" value=""></option>
+<option value="1">1st Year</option>
+<option value="2">2nd Year</option>
+<option value="3">3rd Year</option>
+<option value="4">4th Year</option>
+</select>
+<label class="floating-label" for="year">Year</label>
+<span class="material-symbols-outlined absolute right-3 top-4 text-white/50 pointer-events-none">expand_more</span>
+</div>
+</div>
+<button class="w-full bg-amber hover:bg-amber-hover text-black font-label uppercase tracking-widest text-sm py-4 rounded-full transition-colors mt-8 font-bold" type="button">
+                            Register Student
+                        </button>
+</form>
+</div>
+</div>
+<!-- Right Column: Data Table -->
+<div class="lg:col-span-8">
+<div class="glass-card overflow-hidden flex flex-col h-full">
+<!-- Filters Header -->
+<div class="p-6 border-b border-white/10 flex flex-wrap gap-4 items-center justify-between bg-white/5">
+<div class="relative flex-1 min-w-[200px]">
+<span class="material-symbols-outlined absolute left-3 top-2.5 text-white/50">search</span>
+<input class="w-full bg-black/50 border border-white/10 rounded-full py-2 pl-10 pr-4 text-sm focus:border-amber focus:ring-0 text-white placeholder-white/30 font-label" placeholder="Search records..." type="text"/>
+</div>
+<div class="flex gap-2">
+<select class="bg-black/50 border border-white/10 rounded-full py-2 px-4 text-sm focus:border-amber focus:ring-0 font-label text-white/70 appearance-none">
+<option>All Branches</option>
+<option>CS</option>
+<option>EE</option>
+</select>
+<select class="bg-black/50 border border-white/10 rounded-full py-2 px-4 text-sm focus:border-amber focus:ring-0 font-label text-white/70 appearance-none">
+<option>All Years</option>
+<option>1st</option>
+<option>4th</option>
+</select>
+</div>
+</div>
+<!-- Table -->
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="border-b border-white/10 bg-black/20">
+<th class="font-label text-xs uppercase tracking-widest text-white/40 py-4 px-6 font-normal">Student</th>
+<th class="font-label text-xs uppercase tracking-widest text-white/40 py-4 px-6 font-normal">Roll No</th>
+<th class="font-label text-xs uppercase tracking-widest text-white/40 py-4 px-6 font-normal">Branch</th>
+<th class="font-label text-xs uppercase tracking-widest text-white/40 py-4 px-6 font-normal">Year</th>
+<th class="font-label text-xs uppercase tracking-widest text-white/40 py-4 px-6 font-normal text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="text-sm font-body divide-y divide-white/5">
+<tr class="hover:bg-white/5 transition-colors group">
+<td class="py-4 px-6">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-amber/20 text-amber flex items-center justify-center font-label font-bold text-xs">
+                                                EJ
+                                            </div>
+<div>
+<div class="text-white font-medium">Eleanor James</div>
+<div class="text-white/40 text-xs font-label mt-0.5">ejames@university.edu</div>
+</div>
+</div>
+</td>
+<td class="py-4 px-6 font-label text-white/70">CS-2024-001</td>
+<td class="py-4 px-6"><span class="px-2 py-1 rounded-sm bg-white/5 text-white/70 text-xs font-label border border-white/10">Computer Science</span></td>
+<td class="py-4 px-6 font-label">3</td>
+<td class="py-4 px-6 text-right">
+<button class="text-white/30 hover:text-amber transition-colors p-1"><span class="material-symbols-outlined text-[20px]">edit</span></button>
+<button class="text-white/30 hover:text-red-400 transition-colors p-1"><span class="material-symbols-outlined text-[20px]">delete</span></button>
+</td>
+</tr>
+<tr class="hover:bg-white/5 transition-colors group">
+<td class="py-4 px-6">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-blue-500/20 text-blue-400 flex items-center justify-center font-label font-bold text-xs">
+                                                MC
+                                            </div>
+<div>
+<div class="text-white font-medium">Marcus Chen</div>
+<div class="text-white/40 text-xs font-label mt-0.5">mchen@university.edu</div>
+</div>
+</div>
+</td>
+<td class="py-4 px-6 font-label text-white/70">EE-2024-042</td>
+<td class="py-4 px-6"><span class="px-2 py-1 rounded-sm bg-white/5 text-white/70 text-xs font-label border border-white/10">Electrical</span></td>
+<td class="py-4 px-6 font-label">2</td>
+<td class="py-4 px-6 text-right">
+<button class="text-white/30 hover:text-amber transition-colors p-1"><span class="material-symbols-outlined text-[20px]">edit</span></button>
+<button class="text-white/30 hover:text-red-400 transition-colors p-1"><span class="material-symbols-outlined text-[20px]">delete</span></button>
+</td>
+</tr>
+<tr class="hover:bg-white/5 transition-colors group">
+<td class="py-4 px-6">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-label font-bold text-xs">
+                                                SR
+                                            </div>
+<div>
+<div class="text-white font-medium">Sophia Ramirez</div>
+<div class="text-white/40 text-xs font-label mt-0.5">sramirez@university.edu</div>
+</div>
+</div>
+</td>
+<td class="py-4 px-6 font-label text-white/70">ME-2024-118</td>
+<td class="py-4 px-6"><span class="px-2 py-1 rounded-sm bg-white/5 text-white/70 text-xs font-label border border-white/10">Mechanical</span></td>
+<td class="py-4 px-6 font-label">4</td>
+<td class="py-4 px-6 text-right">
+<button class="text-white/30 hover:text-amber transition-colors p-1"><span class="material-symbols-outlined text-[20px]">edit</span></button>
+<button class="text-white/30 hover:text-red-400 transition-colors p-1"><span class="material-symbols-outlined text-[20px]">delete</span></button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="w-full py-12 bg-[#0D0D0D] border-t border-white/5 mt-20 relative z-10">
+<div class="flex flex-col md:flex-row justify-between items-center px-12 gap-6 max-w-[1440px] mx-auto font-label uppercase tracking-widest text-[10px]">
+<div class="text-[#FF9500]">
+                © 2024 StudentVault. Premium Academic Intelligence.
+            </div>
+<div class="flex gap-6">
+<a class="text-white/40 hover:text-[#FF9500] transition-colors opacity-80 hover:opacity-100" href="#">Privacy Policy</a>
+<a class="text-white/40 hover:text-[#FF9500] transition-colors opacity-80 hover:opacity-100" href="#">Terms of Service</a>
+<a class="text-white/40 hover:text-[#FF9500] transition-colors opacity-80 hover:opacity-100" href="#">Documentation</a>
+</div>
+</div>
+</footer>
+</body></html>

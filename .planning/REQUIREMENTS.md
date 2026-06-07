@@ -43,6 +43,13 @@
 - [x] **FE-11**: Delete confirmation dialog calling DELETE `/api/students/:id` on approval.
 - [x] **FE-12**: Stats Bar displaying live counts (Total Students, CSE, IT, ECE) that update automatically on additions/deletions.
 
+### Student & Analytics Navigation (Module 3)
+
+- [ ] **FE-13**: Implement client-side Tab Navigation/Router in Navbar to toggle active views (`#dashboard`, `#students`, `#analytics`) without full-page refresh.
+- [ ] **FE-14**: Create dedicated Dashboard View featuring a quick-action card deck, recent student registrations (last 3-5 students), and an animated summary visualization.
+- [ ] **FE-15**: Create dedicated Students Directory View housing the full-width student records table, count indicator, and live search/filter bar.
+- [ ] **FE-16**: Create dedicated Analytics View embedding dynamic, interactive data charts (using Chart.js) for Branch Distribution and Year-wise Enrollment.
+
 ## v2 Requirements
 
 Deferred to future release. Tracked but not in current roadmap.
@@ -87,13 +94,17 @@ Deferred to future release. Tracked but not in current roadmap.
 | FE-10 | Phase 4 | Complete |
 | FE-11 | Phase 4 | Complete |
 | FE-12 | Phase 4 | Complete |
+| FE-13 | Phase 5 | Proposed |
+| FE-14 | Phase 5 | Proposed |
+| FE-15 | Phase 5 | Proposed |
+| FE-16 | Phase 5 | Proposed |
 
 **Coverage:**
 
-- v1 requirements: 26 total
-- Mapped to phases: 26
+- v1 requirements: 30 total
+- Mapped to phases: 30
 - Unmapped: 0 ✓
 
 ---
 *Requirements defined: 2026-06-07*
-*Last updated: 2026-06-07 after initial definition*
+*Last updated: 2026-06-07 with Phase 5 view navigation requirements*

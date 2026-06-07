@@ -10,6 +10,8 @@ This roadmap lays out the implementation of StudentVault in 4 progressive phases
 - [x] **Phase 2: API Validation & Filtering** - Integrate input validation checks and implement branch/year query endpoints. (completed 2026-06-07)
 - [x] **Phase 3: Single-Page Frontend Interface** - Serve frontend statically, construct forms and tables, and show toast notifications. (completed 2026-06-07)
 - [x] **Phase 4: Frontend Modals, Filtering, and Stats** - Add edit modal, delete confirmation, live search, and stats counters. (completed 2026-06-07)
+- [x] **Phase 5: Student & Analytics Navigation** - SPA navigation router, dashboard view, Chart.js analytics. (completed 2026-06-07)
+- [ ] **Phase 6: Firebase Firestore Dual-Database Backend** - Add Firebase Firestore as a non-blocking secondary mirror alongside MongoDB. (in progress)
 
 ## Phase Details
 
@@ -90,10 +92,28 @@ Plans:
 
 ---
 
+### Phase 5: Student & Analytics Navigation
+
+**Goal**: Build a client-side tab navigation router in the navigation bar to toggle between active views: Dashboard (overview, stats, quick actions, recent entries), Students Directory (full table, live search/filters, actions), and Analytics (interactive Chart.js visual statistics).
+**Depends on**: Phase 4
+**Requirements**: FE-13, FE-14, FE-15, FE-16
+**Success Criteria**:
+  1. Clicking Dashboard, Students, or Analytics switches the visible tab with active styles, updating URL hash without reloading the page.
+  2. Dashboard view shows recent registrations, quick action drawer links, and an animated summary.
+  3. Students tab houses the complete student list table, search, and branch/year filters.
+  4. Analytics tab loads dynamic bar/doughnut charts showing branch distribution and year distribution.
+
+**Plans**: 1 plan
+
+Plans:
+- [ ] 05-01: Implement view container sections, client tab navigation router, Dashboard cards, and Analytics Chart.js integration.
+
+---
+
 ## Progress
 
 **Execution Order:**
-Phases execute in numeric order: 1 → 2 → 3 → 4
+Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
@@ -101,3 +121,4 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 | 2. API Validation & Filtering | 1/1 | Complete    | 2026-06-07 |
 | 3. Single-Page Frontend Interface | 1/1 | Complete    | 2026-06-07 |
 | 4. Frontend Modals, Filtering, and Stats | 1/1 | Complete    | 2026-06-07 |
+| 5. Student & Analytics Navigation | 0/1 | Planned     |            |

@@ -1,33 +1,74 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
+const mongoose = require('mongoose');
 
-// Initialize MongoDB database connection
+// ── Database Connections ─────────────────────────────────────────────────
+// MongoDB (primary database)
 require('./config/db');
+
+// Firebase Admin SDK (secondary database — lazy-loaded)
+// Only initialise if credentials are present in env
+const FIREBASE_ENABLED =
+  process.env.FIREBASE_PROJECT_ID &&
+  process.env.FIREBASE_CLIENT_EMAIL &&
+  process.env.FIREBASE_PRIVATE_KEY;
+
+if (FIREBASE_ENABLED) {
+  require('./config/firebase'); // initialise on startup
+} else {
+  console.warn('[Firebase] Env vars not set — Firebase sync disabled. Set FIREBASE_PROJECT_ID, FIREBASE_CLIENT_EMAIL, FIREBASE_PRIVATE_KEY to enable.');
+}
 
 const studentRoutes = require('./routes/studentRoutes');
 
 const app = express();
 
-// Middleware
+// ── Middleware ────────────────────────────────────────────────────────────
 app.use(cors());
 app.use(express.json());
 
-// Serve static files from public directory
+// ── Static Files ──────────────────────────────────────────────────────────
 app.use(express.static('public'));
 
-// Routes
+// ── API Routes ────────────────────────────────────────────────────────────
 app.use('/api/students', studentRoutes);
 
-// Health check endpoint
-app.get('/api/health', (req, res) => {
-  res.status(200).json({
-    success: true,
-    message: 'StudentVault Backend is running'
+// ── Health Check ──────────────────────────────────────────────────────────
+app.get('/api/health', async (req, res) => {
+  // MongoDB status
+  const mongoStatus = mongoose.connection.readyState === 1 ? 'connected' : 'disconnected';
+
+  // Firebase status (ping Firestore)
+  let firebaseStatus = 'disabled';
+  if (FIREBASE_ENABLED) {
+    try {
+      const firebaseService = require('./services/firebaseStudentService');
+      const ok = await firebaseService.ping();
+      firebaseStatus = ok ? 'connected' : 'unreachable';
+    } catch {
+      firebaseStatus = 'error';
+    }
+  }
+
+  const allHealthy = mongoStatus === 'connected';
+
+  res.status(allHealthy ? 200 : 503).json({
+    success: allHealthy,
+    message: 'StudentVault Backend',
+    version: '2.0.0',
+    databases: {
+      mongodb: mongoStatus,
+      firebase: firebaseStatus
+    },
+    timestamp: new Date().toISOString()
   });
 });
 
+// ── Start Server ──────────────────────────────────────────────────────────
 const PORT = process.env.PORT || 5001;
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+  console.log(`🚀 StudentVault server running on port ${PORT}`);
+  console.log(`   MongoDB: ${process.env.MONGO_URI || 'mongodb://localhost:27017/studentvault'}`);
+  console.log(`   Firebase: ${FIREBASE_ENABLED ? `project ${process.env.FIREBASE_PROJECT_ID}` : 'disabled (no env vars)'}`);
 });
