@@ -8,10 +8,12 @@
 Requirements for initial release. Each maps to roadmap phases.
 
 ### Database Configuration
-- [ ] **DB-01**: Connect to MongoDB via Mongoose using MONGO_URI from env vars.
-- [ ] **DB-02**: Connect to SQLite database file `auditlog.db` (created under `/database/`) via better-sqlite3.
+
+- [x] **DB-01**: Connect to MongoDB via Mongoose using MONGO_URI from env vars.
+- [x] **DB-02**: Connect to SQLite database file `auditlog.db` (created under `/database/`) via better-sqlite3.
 
 ### Authentication System (Module 1)
+
 - [ ] **AUTH-01**: User can register with name, email, password, and role (enum: admin/student).
 - [ ] **AUTH-02**: User password must be hashed using bcrypt with saltRounds: 10.
 - [ ] **AUTH-03**: Registration validates that no fields are empty, email is valid format, password is at least 6 characters.
@@ -20,6 +22,7 @@ Requirements for initial release. Each maps to roadmap phases.
 - [ ] **AUTH-06**: Auth middleware verifies JWT from Authorization Bearer token header, attaching user to req.user. Returning 401 if token is missing or invalid.
 
 ### Student Management (Module 2)
+
 - [ ] **STUD-01**: Add student with name, rollNo (unique), branch, year, email, phone.
 - [ ] **STUD-02**: Get all student records.
 - [ ] **STUD-03**: Get single student record by ID.
@@ -29,6 +32,7 @@ Requirements for initial release. Each maps to roadmap phases.
 - [ ] **STUD-07**: All student routes are protected by auth middleware.
 
 ### Expense Tracker (Module 3)
+
 - [ ] **EXPN-01**: Add expense with studentId (ref Student), amount, category (enum: Mess, Lab, Library, Transport, Other), date, and description.
 - [ ] **EXPN-02**: Get all expenses with student details (populated student name).
 - [ ] **EXPN-03**: Get single expense by ID.
@@ -40,18 +44,22 @@ Requirements for initial release. Each maps to roadmap phases.
 - [ ] **EXPN-09**: All expense routes are protected by auth middleware.
 
 ### SQLite Audit Logger
-- [ ] **LOGG-01**: Initialize `audit_logs` table (id, method, route, userId, timestamp) in SQLite automatically on server start.
+
+- [x] **LOGG-01**: Initialize `audit_logs` table (id, method, route, userId, timestamp) in SQLite automatically on server start.
 - [ ] **LOGG-02**: Middleware logs every API hit (method, route path, userId if authenticated, timestamp) to SQLite.
 
 ### Documentation & Packaging
-- [ ] **DOCS-01**: Include proper `.gitignore` (node_modules, .env, auditlog.db).
+
+- [x] **DOCS-01**: Include proper `.gitignore` (node_modules, .env, auditlog.db).
 - [ ] **DOCS-02**: Write README.md containing creative framing, stack list, setup steps, route table with sample request bodies, Git setup steps, and Postman guide.
 
 ## v2 Requirements
+
 - **NOTF-01**: Email alert triggered when student's library fine exceeds a threshold.
 - **DASH-01**: Admin dashboard listing top spending categories across the college.
 
 ## Out of Scope
+
 | Feature | Reason |
 |---------|--------|
 | Frontend Web App | CampusCore is strictly a backend REST API project. |
@@ -61,8 +69,8 @@ Requirements for initial release. Each maps to roadmap phases.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| DB-01 | Phase 1 | Pending |
-| DB-02 | Phase 1 | Pending |
+| DB-01 | Phase 1 | Complete |
+| DB-02 | Phase 1 | Complete |
 | AUTH-01 | Phase 2 | Pending |
 | AUTH-02 | Phase 2 | Pending |
 | AUTH-03 | Phase 2 | Pending |
@@ -85,12 +93,15 @@ Requirements for initial release. Each maps to roadmap phases.
 | EXPN-07 | Phase 4 | Pending |
 | EXPN-08 | Phase 4 | Pending |
 | EXPN-09 | Phase 4 | Pending |
-| LOGG-01 | Phase 1 | Pending |
+| LOGG-01 | Phase 1 | Complete |
 | LOGG-02 | Phase 5 | Pending |
-| DOCS-01 | Phase 1 | Pending |
+| DOCS-01 | Phase 1 | Complete |
 | DOCS-02 | Phase 5 | Pending |
+| NOTF-01 | Defer | Deferred |
+| DASH-01 | Defer | Deferred |
 
 **Coverage:**
+
 - v1 requirements: 26 total
 - Mapped to phases: 26
 - Unmapped: 0 ✓
