@@ -3,3 +3,8 @@ node_modules/
 .DS_Store
 *.db
 .agent/
+.vercel
+.firebase/
+.firebaserc
+firebase.json
+
